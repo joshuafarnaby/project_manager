@@ -1,0 +1,24 @@
+{
+  "name": "project_manager",
+  "version": "1.0.0",
+  "private": true,
+  "description": "An application where users can manage projects and tasks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joshuafarnaby/project_manager.git"
+  },
+  "author": "Joshua Farnaby",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joshuafarnaby/project_manager/issues"
+  },
+  "homepage": "https://github.com/joshuafarnaby/project_manager#readme",
+  "devDependencies": {
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2"
+  }
+}
