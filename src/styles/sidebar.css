@@ -1,0 +1,41 @@
+.sidebar-container {
+  grid-area: sidebar;
+  background-color: var(--primary-red);
+  color: #fefefe;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+}
+
+.current-date {
+  line-height: 1;
+}
+
+.nav-btns-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.nav-btn {
+  transition: transform 0.25s;
+  background-color: var(--primary-red);
+  color: #fefefe;
+  font-size: 1.5rem;
+  border: none;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.clicked {
+  transform: translateX(20px) scale(1.1);
+  text-decoration: underline;
+}
+
+.nav-btn:hover {
+  transform: translateX(20px) scale(1.1);
+  cursor: pointer;
+}
