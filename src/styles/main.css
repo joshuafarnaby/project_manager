@@ -1,0 +1,19 @@
+.main-container {
+  grid-area: main;
+  border: 2px solid var(--primary-red);
+  padding: 20px;
+  color: var(--primary-red);
+}
+
+.main-heading {
+  line-height: 1;
+  margin-bottom: 100px;
+}
+
+.main-container.single-project {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  /* gap: 100px; */
+}

@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato&family=Poppins:wght@200;300&family=Roboto:wght@300&display=swap');
 
 @import './sidebar.css';
+@import './main.css';
+@import './task-list.css';
+@import './new-task-form.css';
 
 *,
 *::before,
@@ -13,6 +16,7 @@
 
 :root {
   --primary-red: #ef4444;
+  --complete-green: #4ade80;
 }
 
 body {
@@ -37,9 +41,4 @@ body {
 
 .wrapper > * {
   border-radius: 10px;
-}
-
-.main-container {
-  grid-area: main;
-  border: 2px solid var(--primary-red);
 }

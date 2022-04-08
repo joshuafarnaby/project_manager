@@ -4,20 +4,10 @@ import { sidebar } from './sidebar'
 
 sidebar.render()
 
-// let navBtns = document.querySelectorAll('.nav-btn');
+document.querySelectorAll('.checkbox').forEach(checkbox => {
+  checkbox.addEventListener('click', (e) => {
+    let parent = e.target.parentElement;
 
-// function addClickedClass(button) {
-//   button.parentElement.querySelector('.clicked').classList.remove('clicked');
-//   button.classList.add('clicked')
-
-// }
-
-// function loadContent(e) {
-//   if (e.target.classList.contains('clicked')) return
-
-//   addClickedClass(e.target)
-// }
-
-// navBtns.forEach(navBtn => {
-//   navBtn.addEventListener('click', loadContent)
-// })
+    parent.classList.toggle('complete')
+  })
+})
