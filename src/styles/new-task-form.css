@@ -1,8 +1,13 @@
+.task-form-container {
+  border: 1px solid var(--primary-red);
+  border-radius: 10px;
+}
+
 .new-task-form {
   width: 100%;
   display: grid;
-  /* grid-template-columns: repeat(6, 1fr); */
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(6, 1fr);
+  /* grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; */
   padding: 20px;
 }
 
@@ -54,9 +59,6 @@
 
 .add {
   background-color: var(--complete-green);
-  /* background-color: #fefefe; */
-  /* border: 1px solid var(--complete-green); */
-  /* color: var(--complete-green); */
 }
 
 .add:hover {

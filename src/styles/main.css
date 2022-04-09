@@ -3,6 +3,11 @@
   border: 2px solid var(--primary-red);
   padding: 20px;
   color: var(--primary-red);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .main-heading {
@@ -10,10 +15,6 @@
   margin-bottom: 100px;
 }
 
-.main-container.single-project {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  /* gap: 100px; */
+.list {
+  width: 80%;
 }

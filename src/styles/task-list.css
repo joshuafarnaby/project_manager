@@ -1,11 +1,11 @@
-.task-list {
-  width: 80%;
+.list.single-project {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.task-list li {
+li.task,
+.new-task-btn {
   display: flex;
   align-items: center;
   border: 1px solid var(--primary-red);
@@ -13,7 +13,17 @@
   border-radius: 10px;
 }
 
-.task-list li:hover {
+.new-task-btn {
+  font-size: 24px;
+  font-family: inherit;
+  gap: 10px;
+  justify-content: flex-end;
+  background-color: #fefefe;
+  color: var(--primary-red);
+}
+
+.list li:hover,
+.new-task-btn:hover {
   box-shadow: 3px 3px 4px var(--primary-red);
   cursor: pointer;
 }
@@ -31,12 +41,12 @@
   margin-right: auto;
 }
 
-.task-list li.complete .checkbox {
+.list.single-project li.complete .checkbox {
   border-color: var(--complete-green);
   background-color: var(--complete-green);
 }
 
-.task-list li.complete .checkbox::before {
+.list.single-project li.complete .checkbox::before {
   position: absolute;
   content: '';
   background-image: url('../assets/icons/check.svg');
@@ -44,8 +54,4 @@
   left: -1px;
   width: 100%;
   height: 100%;
-}
-
-.add-task-btn p {
-  margin-left: auto;
 }
