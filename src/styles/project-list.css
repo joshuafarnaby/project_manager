@@ -1,0 +1,17 @@
+.list.multiple-projects {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 20px;
+}
+
+.list-item.project {
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.list-item.project:hover .project-name {
+  text-decoration: underline;
+}

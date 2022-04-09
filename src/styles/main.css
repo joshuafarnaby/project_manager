@@ -18,3 +18,9 @@
 .list {
   width: 80%;
 }
+
+.list-item {
+  border: 1px solid var(--primary-red);
+  padding: 5px 10px;
+  border-radius: 10px;
+}

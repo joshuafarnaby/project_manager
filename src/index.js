@@ -49,6 +49,6 @@ function showNewTaskForm(ev) {
   newTaskForm.render(prevElement.parentElement, ev.target);
 }
 
-const newTaskBtn = document.getElementById('new-task-btn');
+// const newTaskBtn = document.getElementById('new-task-btn');
 
-newTaskBtn.addEventListener('click', showNewTaskForm);
+// newTaskBtn.addEventListener('click', showNewTaskForm);
