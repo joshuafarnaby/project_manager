@@ -15,6 +15,16 @@ export const mainDisplay = (() => {
     return mainContainer
   }
 
+  const requestSingleProject = (ev) => {
+    // ev.stopPropagation();
+
+    const id = ev.target.localName == 'p' 
+      ? ev.target.parentElement.getAttribute('id')
+      : ev.target.getAttribute('id');
+
+    pubsub.publish('singleProjectRequested', id);
+  }
+
   const renderProjectList = (projectData) => {
     const heading = document.getElementById('main-heading');
     const listContainer = document.getElementById('list');
@@ -23,18 +33,30 @@ export const mainDisplay = (() => {
     heading.textContent = projectData.heading;
     listContainer.setAttribute('class', 'list multiple-projects');
 
-    projectData.projectListItems.forEach(node => listContainer.appendChild(node));
+    projectData.projectListItems.forEach(node => {
+      node.addEventListener('click', requestSingleProject)
+      listContainer.appendChild(node)
+    });
 
     if (projectData.button) listContainer.appendChild(projectData.button)
   }
 
-  const render = () => {
-    const mainDisplayHTML = createMainDisplayHTML();
+  const renderSingleProject = (data) => {
+    const heading = document.getElementById('main-heading');
+    const listContainer = document.getElementById('list');
 
-    document.querySelector('.wrapper').appendChild(mainDisplayHTML)
+    heading.textContent = data.heading;
+
+    listContainer.innerHTML = '';
+    listContainer.setAttribute('class', 'list single-project');
+    listContainer.appendChild(data.button);
   }
 
-  pubsub.subscribe('projectListBuilt', renderProjectList)
+  const render = () => document.querySelector('.wrapper').appendChild(createMainDisplayHTML());
+  
+
+  pubsub.subscribe('projectListBuilt', renderProjectList);
+  pubsub.subscribe('singleProjectBuilt', renderSingleProject)
 
   return {
     render

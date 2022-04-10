@@ -26,8 +26,8 @@ const tuesday = new Project('Tuesday');
 const wednesday = new Project('Wednesday');
 const thursday = new Project('Thursday');
 const friday = new Project('Friday');
-const saturday = new Project('Saturday')
-const sunday = new Project('Sunday')
+const saturday = new Project('Saturday');
+const sunday = new Project('Sunday');
 
 
 export const projectsModule = (() => {
@@ -35,12 +35,13 @@ export const projectsModule = (() => {
   // const projects = [];
   const weekdays = [monday, tuesday, wednesday, thursday, friday, saturday, sunday];
 
+  const getProject = (id) => [...projects, ...weekdays].filter(project => project.name == id)[0];
+
   const sendAllProjects = (heading, projectList) => {
-    pubsub.publish('projectsRetrieved', { heading, projectNames: projectList.map(project => project.name)})
+    pubsub.publish('projectsRetrieved', { heading, projectNames: projectList.map(project => project.name)});
   }
-  
-  // pubsub.publish('projectNamesRetrieved', projects.map(project => project.name));
-  // const sendAllWeekdays = () => pubsub.publish('projectNamesRetrieved', weekdays.map(project => project.name));
+
+  const sendSingleProject = (id) => pubsub.publish('singleProjectRetrieved', getProject(id));
   
   const handleTabChange = (tabName) => {
     if (tabName == 'projects') {
@@ -50,5 +51,6 @@ export const projectsModule = (() => {
     }
   }
 
-  pubsub.subscribe('tabChanged', handleTabChange)
+  pubsub.subscribe('tabChanged', handleTabChange);
+  pubsub.subscribe('singleProjectRequested', sendSingleProject)
 })();
