@@ -25,7 +25,18 @@
   border-radius: 10px;
 }
 
-.main-container button {
+/* .main-container button {
+  font-size: 24px;
+  font-family: inherit;
+  background-color: #fefefe;
+  color: var(--primary-red);
+  border: 1px solid var(--primary-red);
+  padding: 5px 10px;
+  border-radius: 10px;
+} */
+
+.new-project-btn,
+.new-task-btn {
   font-size: 24px;
   font-family: inherit;
   background-color: #fefefe;
@@ -35,8 +46,16 @@
   border-radius: 10px;
 }
 
-.list li:hover,
+/* .list li:hover,
 .main-container button:hover {
+  box-shadow: 3px 3px 4px var(--primary-red);
+  cursor: pointer;
+  text-decoration: underline;
+} */
+
+.list > li:hover:not(.task-form-container),
+.new-project-btn:hover,
+.new-task-btn:hover {
   box-shadow: 3px 3px 4px var(--primary-red);
   cursor: pointer;
   text-decoration: underline;

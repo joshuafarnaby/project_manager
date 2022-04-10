@@ -33,12 +33,15 @@ export const mainDisplay = (() => {
     heading.textContent = projectData.heading;
     listContainer.setAttribute('class', 'list multiple-projects');
 
-    projectData.projectListItems.forEach(node => {
-      node.addEventListener('click', requestSingleProject)
+    projectData.elements.forEach(node => {
+      if (node.localName == 'li') {
+        node.addEventListener('click', requestSingleProject)
+      }
+      
       listContainer.appendChild(node)
     });
 
-    if (projectData.button) listContainer.appendChild(projectData.button)
+    // if (projectData.button) listContainer.appendChild(projectData.button)
   }
 
   const renderSingleProject = (data) => {

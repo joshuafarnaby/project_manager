@@ -16,6 +16,8 @@ export const builderModule = (() => {
     btn.setAttribute('class', 'new-task-btn');
     btn.innerHTML = 'New Task &#43;'
 
+    btn.addEventListener('click', (ev) => pubsub.publish('newTaskBtnClicked', ev.target));
+
     return btn
   }
 
@@ -23,7 +25,7 @@ export const builderModule = (() => {
   const newTaskBtn = buildNewTaskBtn()
 
   const buildProjectList = (projectData) => {
-    projectData.projectListItems = projectData.projectNames.map(name => {
+    projectData.elements = projectData.elements.map(name => {
       const li = document.createElement('li');
       const p = document.createElement('p');
 
@@ -37,23 +39,19 @@ export const builderModule = (() => {
       return li
     });
 
-    delete projectData.projectNames
-
     if (projectData.heading == 'All Projects') {
-      projectData.button = newProjectBtn;
+      projectData.elements.push(newProjectBtn);
     }
 
-    return projectData;
+    pubsub.publish('projectListBuilt', projectData);
   }
 
   const buildSingleProject = (project) => { 
     return {heading: project.name, button: newTaskBtn } 
   };
 
-
-  const sendProjectList = (projectData) => pubsub.publish('projectListBuilt', buildProjectList(projectData))
   const sendSingleProject = (project) => pubsub.publish('singleProjectBuilt', buildSingleProject(project))
 
-  pubsub.subscribe('projectsRetrieved', sendProjectList);
+  pubsub.subscribe('projectsRetrieved', buildProjectList);
   pubsub.subscribe('singleProjectRetrieved', sendSingleProject)
 })();

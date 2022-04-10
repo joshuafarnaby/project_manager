@@ -38,7 +38,7 @@ export const projectsModule = (() => {
   const getProject = (id) => [...projects, ...weekdays].filter(project => project.name == id)[0];
 
   const sendAllProjects = (heading, projectList) => {
-    pubsub.publish('projectsRetrieved', { heading, projectNames: projectList.map(project => project.name)});
+    pubsub.publish('projectsRetrieved', { heading, elements: projectList.map(project => project.name)});
   }
 
   const sendSingleProject = (id) => pubsub.publish('singleProjectRetrieved', getProject(id));
