@@ -2,6 +2,8 @@ import calToday from './assets/icons/calendar-today.svg'
 import calWeek from './assets/icons/calendar-week.svg'
 import list from './assets/icons/clipboard-list-outline.svg'
 
+import { pubsub } from './pubsub';
+
 export const sidebar = (() => {
   const _labels = ['Today', 'Week', 'Projects'];
   const _icons = [calToday, calWeek, list];
@@ -36,7 +38,7 @@ export const sidebar = (() => {
     ev.target.parentElement.querySelector('.clicked').classList.remove('clicked');
     ev.target.classList.add('clicked')
 
-    console.log(tab);
+    pubsub.publish('tabChanged', tab);
   }
 
   const render = () => {
