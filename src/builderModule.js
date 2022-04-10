@@ -27,14 +27,12 @@ export const builderModule = (() => {
   const buildProjectList = (projectData) => {
     projectData.elements = projectData.elements.map(name => {
       const li = document.createElement('li');
-      const p = document.createElement('p');
-
       li.setAttribute('class', 'list-item project');
       li.setAttribute('id', name)
-      p.setAttribute('class', 'project-name');
-      p.textContent = name
 
-      li.appendChild(p);
+      li.innerHTML = `
+        <p class="project-name">${name}</p>
+      `
 
       return li
     });
@@ -47,7 +45,23 @@ export const builderModule = (() => {
   }
 
   const buildSingleProject = (project) => { 
-    return {heading: project.name, button: newTaskBtn } 
+    return {
+      heading: project.name,
+      elements: project.tasks.map(task => {
+        const li = document.createElement('li');
+        li.setAttribute('class', 'list-item task');
+
+        li.innerHTML = `
+          <div class="checkbox"></div>
+          <p class="task-name">${task.description}</p>
+          <p class="task-deadline">${task.deadline}</p>
+        `
+
+        return li
+      }).concat(newTaskBtn)
+    }
+  
+    // return {heading: project.name, button: newTaskBtn } 
   };
 
   const sendSingleProject = (project) => pubsub.publish('singleProjectBuilt', buildSingleProject(project))

@@ -52,7 +52,8 @@ export const mainDisplay = (() => {
 
     listContainer.innerHTML = '';
     listContainer.setAttribute('class', 'list single-project');
-    listContainer.appendChild(data.button);
+
+    data.elements.forEach(element => listContainer.appendChild(element))
   }
 
   const render = () => {

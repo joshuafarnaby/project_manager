@@ -42,20 +42,7 @@ const newTaskForm = (() => {
 
   // const render = (parent, target) => parent.insertBefore(newTaskFormContainer, target);
 
-  const render = (newTaskBtn) => {
-    console.log(newTaskBtn);
-    const prevElement = newTaskBtn.previousElementSibling;
-
-    // continue with this - form renders wrong, will need to change style rules
-
-    // if (prevElement.classList.contains('task-form-container')) return
-
-    if (!prevElement) {
-      newTaskBtn.parentElement.insertBefore(newTaskFormContainer, newTaskBtn)
-    }
-
-  }
-  
+  const render = (newTaskBtn) => newTaskBtn.parentElement.insertBefore(newTaskFormContainer, newTaskBtn);
 
   pubsub.subscribe('newTaskBtnClicked', render)
 
