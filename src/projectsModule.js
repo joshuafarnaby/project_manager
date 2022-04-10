@@ -58,6 +58,8 @@ export const projectsModule = (() => {
       sendAllProjects('All Projects', projects);
     } else if (tabName == 'week') {
       sendAllProjects('Week', weekdays)
+    } else {
+      sendDefaultProject();
     }
   }
 
