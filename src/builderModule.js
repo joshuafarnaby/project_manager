@@ -12,10 +12,8 @@ export const builderModule = (() => {
 
   const newProjectBtn = buildNewProjectBtn()
 
-  const buildProjectList = (nameArray) => {
-    const nodes = [];
-
-    nameArray.forEach(name => {
+  const buildProjectList = (projectData) => {
+    projectData.projectListItems = projectData.projectNames.map(name => {
       const li = document.createElement('li');
       const p = document.createElement('p');
 
@@ -25,16 +23,20 @@ export const builderModule = (() => {
 
       li.appendChild(p);
 
-      nodes.push(li)
-    })
+      return li
+    });
 
-    nodes.push(newProjectBtn);
+    delete projectData.projectNames
 
-    return nodes
+    if (projectData.heading == 'All Projects') {
+      projectData.button = newProjectBtn;
+    }
+
+    return projectData;
   }
 
 
-  const sendProjectList = (nameArray) => pubsub.publish('projectListBuilt', buildProjectList(nameArray))
+  const sendProjectList = (projectData) => pubsub.publish('projectListBuilt', buildProjectList(projectData))
 
-  pubsub.subscribe('projectNamesRetrieved', sendProjectList)
+  pubsub.subscribe('projectsRetrieved', sendProjectList)
 })();

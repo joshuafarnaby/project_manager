@@ -15,13 +15,17 @@ export const mainDisplay = (() => {
     return mainContainer
   }
 
-  const renderProjectList = (nodeList) => {
-    document.getElementById('main-heading').textContent = 'All Projects';
-    document.getElementById('list').setAttribute('class', 'list multiple-projects');
+  const renderProjectList = (projectData) => {
+    const heading = document.getElementById('main-heading');
+    const listContainer = document.getElementById('list');
 
-    nodeList.forEach(node => document.getElementById('list').appendChild(node));
+    listContainer.innerHTML = '';
+    heading.textContent = projectData.heading;
+    listContainer.setAttribute('class', 'list multiple-projects');
 
-    // document.getElementById('list').innerHTML += (newProjectBtnHTML);
+    projectData.projectListItems.forEach(node => listContainer.appendChild(node));
+
+    if (projectData.button) listContainer.appendChild(projectData.button)
   }
 
   const render = () => {
