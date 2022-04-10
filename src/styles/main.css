@@ -53,7 +53,8 @@
   text-decoration: underline;
 } */
 
-.list > li:hover:not(.task-form-container),
+/* .list > li:hover:not(.task-form-container), */
+.list > li.project:hover,
 .new-project-btn:hover,
 .new-task-btn:hover {
   box-shadow: 3px 3px 4px var(--primary-red);

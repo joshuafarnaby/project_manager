@@ -47,10 +47,10 @@ sunday.addTask('Walk the dog', '16:00');
 sunday.addTask('Buy groceries', '12:00');
 sunday.addTask('Go for a run', '18:00');
 
-wednesday.addTask('Go to the gym', '15:00');
-wednesday.addTask('Walk the dog', '16:00');
-wednesday.addTask('Buy groceries', '12:00');
-wednesday.addTask('Go for a run', '18:00');
+wednesday.addTask('Feed the dragon', '15:00');
+wednesday.addTask('Duel the neighbour', '16:00');
+wednesday.addTask('Duel the other neighbour', '12:00');
+wednesday.addTask('Find the ring', '18:00');
 
 // console.log(monday);
 

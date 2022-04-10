@@ -22,35 +22,38 @@ document.querySelectorAll('.checkbox').forEach(checkbox => {
 })
 
 const newTaskForm = (() => {
-  const newTaskFormContainer = document.createElement('li');
+  const buildNewTaskForm = () => {
+    const container = document.createElement('li');
+    container.classList.add('task-form-container');
+    container.innerHTML = `
+      <form action="#" method="post" class="new-task-form">
+        <p class="description-container">
+          <label for="description">Task:</label>
+          <input type="text" name="description" id="description" class="new-task-input">
+        </p>
+        <p class="deadline-container">
+          <label for="deadline">Deadline:</label>
+          <input type="time" name="deadline" id="deadline" class="new-task-input">
+        </p>
+        <button type="button" id="add-task" class="form-btn add">Add</button>
+        <button type="button" id="cancel" class="form-btn cancel">Cancel</button>
+      </form>
+    `
 
-  newTaskFormContainer.classList.add('task-form-container');
-  newTaskFormContainer.innerHTML = `
-    <form action="#" method="post" class="new-task-form">
-      <p class="description-container">
-        <label for="description">Task:</label>
-        <input type="text" name="description" id="description" class="new-task-input">
-      </p>
-      <p class="deadline-container">
-        <label for="deadline">Deadline:</label>
-        <input type="time" name="deadline" id="deadline" class="new-task-input">
-      </p>
-      <button type="button" id="add-task" class="form-btn add">Add</button>
-      <button type="button" id="cancel" class="form-btn cancel">Cancel</button>
-    </form>
-  `
+    return container
+  }
+
+  const newTaskForm = buildNewTaskForm();
 
   const hideNewTaskForm = (ev) => {
-    ev.target.closest('#list').removeChild(newTaskFormContainer);
+    ev.target.closest('#list').removeChild(newTaskForm);
   };
 
-  // const render = (parent, target) => parent.insertBefore(newTaskFormContainer, target);
-
-  const render = (newTaskBtn) => newTaskBtn.parentElement.insertBefore(newTaskFormContainer, newTaskBtn);
+  const render = (newTaskBtn) => newTaskBtn.parentElement.insertBefore(newTaskForm, newTaskBtn);
 
   pubsub.subscribe('newTaskBtnClicked', render);
 
-  newTaskFormContainer.querySelector('#cancel').addEventListener('click', hideNewTaskForm)
+  newTaskForm.querySelector('#cancel').addEventListener('click', hideNewTaskForm)
 
   return {
     render
