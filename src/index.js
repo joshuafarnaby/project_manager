@@ -1,9 +1,11 @@
 import './styles/style.css'
 
 import { sidebar } from './sidebar';
+import { mainDisplay } from './mainDisplay';
 import { pubsub } from './pubsub';
 
-sidebar.render()
+sidebar.render();
+mainDisplay.render();
 
 document.querySelectorAll('.checkbox').forEach(checkbox => {
   checkbox.addEventListener('click', (e) => {
