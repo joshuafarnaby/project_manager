@@ -1,7 +1,7 @@
 import { pubsub } from "./pubsub";
 
 export const mainDisplay = (() => {
-  const newProjectBtnHTML = `<button id="new-project-btn" class="new-project-btn">New Project &#43;</button>`;
+  // const newProjectBtnHTML = `<button id="new-project-btn" class="new-project-btn">New Project &#43;</button>`;
 
   const createMainDisplayHTML = () => {
     const mainContainer = document.createElement('main');
@@ -55,7 +55,11 @@ export const mainDisplay = (() => {
     listContainer.appendChild(data.button);
   }
 
-  const render = () => document.querySelector('.wrapper').appendChild(createMainDisplayHTML());
+  const render = () => {
+    document.querySelector('.wrapper').appendChild(createMainDisplayHTML());
+
+    pubsub.publish('mainDisplayRendered');
+  };
   
 
   pubsub.subscribe('projectListBuilt', renderProjectList);

@@ -42,6 +42,16 @@ export const projectsModule = (() => {
   }
 
   const sendSingleProject = (id) => pubsub.publish('singleProjectRetrieved', getProject(id));
+
+  const sendDefaultProject = () => {
+    const date = new Date;
+    
+    let day = date.getDay();
+
+    day == 0 ? day = 6 : day -= 1;
+
+    pubsub.publish('singleProjectRetrieved', weekdays[day]);
+  }
   
   const handleTabChange = (tabName) => {
     if (tabName == 'projects') {
@@ -51,6 +61,7 @@ export const projectsModule = (() => {
     }
   }
 
+  pubsub.subscribe('mainDisplayRendered', sendDefaultProject);
   pubsub.subscribe('tabChanged', handleTabChange);
   pubsub.subscribe('singleProjectRequested', sendSingleProject)
 })();
