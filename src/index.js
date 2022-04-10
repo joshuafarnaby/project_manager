@@ -40,11 +40,17 @@ const newTaskForm = (() => {
     </form>
   `
 
+  const hideNewTaskForm = (ev) => {
+    ev.target.closest('#list').removeChild(newTaskFormContainer);
+  };
+
   // const render = (parent, target) => parent.insertBefore(newTaskFormContainer, target);
 
   const render = (newTaskBtn) => newTaskBtn.parentElement.insertBefore(newTaskFormContainer, newTaskBtn);
 
-  pubsub.subscribe('newTaskBtnClicked', render)
+  pubsub.subscribe('newTaskBtnClicked', render);
+
+  newTaskFormContainer.querySelector('#cancel').addEventListener('click', hideNewTaskForm)
 
   return {
     render
@@ -53,13 +59,13 @@ const newTaskForm = (() => {
 
 
 
-function showNewTaskForm(ev) {
-  const prevElement = ev.target.previousElementSibling;
+// function showNewTaskForm(ev) {
+//   const prevElement = ev.target.previousElementSibling;
 
-  if (prevElement.classList.contains('task-form-container')) return
+//   if (prevElement.classList.contains('task-form-container')) return
 
-  newTaskForm.render(prevElement.parentElement, ev.target);
-}
+//   newTaskForm.render(prevElement.parentElement, ev.target);
+// }
 
 // const newTaskBtn = document.getElementById('new-task-btn');
 
