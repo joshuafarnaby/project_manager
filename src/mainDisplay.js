@@ -22,6 +22,8 @@ export const mainDisplay = (() => {
     btn.setAttribute('class', 'new-project-btn');
     btn.innerHTML = 'New Project &#43;';
 
+    btn.addEventListener('click', (ev) => pubsub.publish('newProjectBtnClicked', ev.target))
+
     return btn
   })();
 
