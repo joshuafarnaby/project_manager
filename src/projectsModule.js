@@ -42,10 +42,10 @@ const friday = new Project('Friday');
 const saturday = new Project('Saturday');
 const sunday = new Project('Sunday');
 
-sunday.addTask('Go to the gym', '15:00');
-sunday.addTask('Walk the dog', '16:00');
-sunday.addTask('Buy groceries', '12:00');
-sunday.addTask('Go for a run', '18:00');
+monday.addTask('Go to the gym');
+monday.addTask('Walk the dog', '16:00');
+monday.addTask('Buy groceries', '12:00');
+monday.addTask('Go for a run', '18:00');
 
 wednesday.addTask('Feed the dragon', '15:00');
 wednesday.addTask('Duel the neighbour', '16:00');
@@ -62,8 +62,12 @@ export const projectsModule = (() => {
 
   const getProject = (id) => [...projects, ...weekdays].filter(project => project.name == id)[0];
 
-  const sendAllProjects = (heading, projectList) => {
-    pubsub.publish('projectsRetrieved', { heading, elements: projectList.map(project => project.name)});
+  const sendProjectSummary = (heading, projectList) => {
+    pubsub.publish('projectsRetrieved', { 
+      heading, 
+      projectsInfo: projectList.map(project => {
+        return { name: project.name, deadline: project.deadline }
+      })});
   }
 
   const sendSingleProject = (id) => pubsub.publish('singleProjectRetrieved', getProject(id));
@@ -80,9 +84,9 @@ export const projectsModule = (() => {
   
   const handleTabChange = (tabName) => {
     if (tabName == 'projects') {
-      sendAllProjects('All Projects', projects);
+      sendProjectSummary('All Projects', projects);
     } else if (tabName == 'week') {
-      sendAllProjects('Week', weekdays)
+      sendProjectSummary('Week', weekdays)
     } else {
       sendDefaultProject();
     }

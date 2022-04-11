@@ -3,7 +3,7 @@ import './styles/style.css'
 import { sidebar } from './sidebar';
 import { mainDisplay } from './mainDisplay';
 import { projectsModule } from './projectsModule';
-import { builderModule } from './builderModule';
+// import { builderModule } from './builderModule';
 import { pubsub } from './pubsub';
 
 const controller = (() => {

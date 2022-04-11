@@ -1,23 +1,46 @@
 import { pubsub } from "./pubsub";
 
 export const mainDisplay = (() => {
-  // const newProjectBtnHTML = `<button id="new-project-btn" class="new-project-btn">New Project &#43;</button>`;
-
-  const createMainDisplayHTML = () => {
+  const mainDisplaySkeleton = (() => {
     const mainContainer = document.createElement('main');
     mainContainer.classList.add('main-container');
 
     mainContainer.innerHTML = `
       <h2 id="main-heading" class="main-heading"></h2>
+      <p id="deadline-container" class="small"></p>
       <ul id="list" class="list"></ul>
     `
 
     return mainContainer
-  }
+  })();
+
+  // btns do not change and are inserted into DOM dynamically
+
+  const newProjectBtn = (() => {
+    const btn = document.createElement('button');
+    btn.setAttribute('id', 'new-project-btn');
+    btn.setAttribute('class', 'new-project-btn');
+    btn.innerHTML = 'New Project &#43;';
+
+    return btn
+  })();
+
+  const newTaskBtn = (() => {
+    const btn = document.createElement('button');
+    btn.setAttribute('id', 'new-task-btn');
+    btn.setAttribute('class', 'new-task-btn');
+    btn.innerHTML = 'New Task &#43;'
+
+    btn.addEventListener('click', (ev) => pubsub.publish('newTaskBtnClicked', ev.target));
+
+    return btn
+  })();
+
+  const mainHeading = mainDisplaySkeleton.querySelector('#main-heading');
+  const listContainer = mainDisplaySkeleton.querySelector('#list');
+
 
   const requestSingleProject = (ev) => {
-    // ev.stopPropagation();
-
     const id = ev.target.localName == 'p' 
       ? ev.target.parentElement.getAttribute('id')
       : ev.target.getAttribute('id');
@@ -26,45 +49,64 @@ export const mainDisplay = (() => {
   }
 
   const renderProjectList = (projectData) => {
-    const heading = document.getElementById('main-heading');
-    const listContainer = document.getElementById('list');
-
+    mainHeading.textContent = projectData.heading;
     listContainer.innerHTML = '';
-    heading.textContent = projectData.heading;
     listContainer.setAttribute('class', 'list multiple-projects');
 
-    projectData.elements.forEach(node => {
-      if (node.localName == 'li') {
-        node.addEventListener('click', requestSingleProject)
-      }
-      
-      listContainer.appendChild(node)
-    });
+    projectData.projectsInfo.forEach(project => {
+      const li = document.createElement('li');
+      li.setAttribute('class', 'list-item project');
+      li.setAttribute('id', project.name)
 
-    // if (projectData.button) listContainer.appendChild(projectData.button)
+      li.innerHTML = `
+        <p class="project-name">${project.name}</p>
+      `
+
+      if (project.deadline) {
+        li.innerHTML += `<p class="project-deadline small">Due: ${project.deadline}</p>`
+      }
+
+      li.addEventListener('click', requestSingleProject);
+      listContainer.appendChild(li);
+    })
+
+    if (projectData.heading != 'Week') listContainer.appendChild(newProjectBtn);
   }
 
-  const renderSingleProject = (data) => {
-    const heading = document.getElementById('main-heading');
-    const listContainer = document.getElementById('list');
-
-    heading.textContent = data.heading;
-
+  const renderSingleProject = (project) => {
+    mainHeading.textContent = project.name;
     listContainer.innerHTML = '';
     listContainer.setAttribute('class', 'list single-project');
 
-    data.elements.forEach(element => listContainer.appendChild(element))
+    if (project.deadline) mainDisplaySkeleton.querySelector('#deadline-container').textContent = `Due: ${project.deadline}`;
+
+    project.tasks.forEach(task => {
+      const li = document.createElement('li');
+      li.setAttribute('class', 'list-item task');
+
+      li.innerHTML = `
+        <div class="checkbox"></div>
+        <p class="task-name">${task.description}</p>
+        <p class="task-deadline">${task.deadline ? task.deadline : 'Anytime'}</p>
+      `
+
+      listContainer.appendChild(li);
+    })
+
+    listContainer.appendChild(newTaskBtn);
+
+    // data.elements.forEach(element => listContainer.appendChild(element));
   }
 
   const render = () => {
-    document.querySelector('.wrapper').appendChild(createMainDisplayHTML());
+    document.querySelector('.wrapper').appendChild(mainDisplaySkeleton);
 
     pubsub.publish('mainDisplayRendered');
   };
   
 
-  pubsub.subscribe('projectListBuilt', renderProjectList);
-  pubsub.subscribe('singleProjectBuilt', renderSingleProject)
+  pubsub.subscribe('projectsRetrieved', renderProjectList);
+  pubsub.subscribe('singleProjectRetrieved', renderSingleProject);
 
   return {
     render
