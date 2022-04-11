@@ -38,6 +38,7 @@ export const mainDisplay = (() => {
 
   const mainHeading = mainDisplaySkeleton.querySelector('#main-heading');
   const listContainer = mainDisplaySkeleton.querySelector('#list');
+  let currentProject;
 
 
   const requestSingleProject = (ev) => {
@@ -90,13 +91,36 @@ export const mainDisplay = (() => {
         <p class="task-deadline">${task.deadline ? task.deadline : 'Anytime'}</p>
       `
 
+      li.querySelector('.checkbox').addEventListener('click', (e) => e.target.parentElement.classList.toggle('complete'));
+
       listContainer.appendChild(li);
     })
 
+    currentProject = project;
     listContainer.appendChild(newTaskBtn);
 
-    // data.elements.forEach(element => listContainer.appendChild(element));
+    console.log(currentProject);
   }
+
+  const renderNewTask = (formDataObj) => {
+    const li = document.createElement('li');
+    li.setAttribute('class', 'list-item task');
+
+    li.innerHTML = `
+      <div class="checkbox"></div>
+      <p class="task-name">${formDataObj.description}</p>
+      <p class="task-deadline">${formDataObj.deadline ? formDataObj.deadline : 'Anytime'}</p>
+    `
+
+    li.querySelector('.checkbox').addEventListener('click', (e) => e.target.parentElement.classList.toggle('complete'));
+
+    listContainer.insertBefore(li, listContainer.lastElementChild);
+    currentProject.addTask(formDataObj.description, formDataObj.deadline);
+
+    console.log(currentProject.tasks);
+  }
+
+
 
   const render = () => {
     document.querySelector('.wrapper').appendChild(mainDisplaySkeleton);
@@ -107,6 +131,7 @@ export const mainDisplay = (() => {
 
   pubsub.subscribe('projectsRetrieved', renderProjectList);
   pubsub.subscribe('singleProjectRetrieved', renderSingleProject);
+  pubsub.subscribe('newTaskFormSubmitted', renderNewTask)
 
   return {
     render

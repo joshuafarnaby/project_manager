@@ -13,16 +13,18 @@ const controller = (() => {
   mainDisplay.render();
 })()
 
-document.querySelectorAll('.checkbox').forEach(checkbox => {
-  checkbox.addEventListener('click', (e) => {
-    let parent = e.target.parentElement;
+// 
 
-    parent.classList.toggle('complete')
-  })
-})
+// document.querySelectorAll('.checkbox').forEach(checkbox => {
+//   checkbox.addEventListener('click', (e) => {
+//     let parent = e.target.parentElement;
+
+//     parent.classList.toggle('complete')
+//   })
+// })
 
 const newTaskForm = (() => {
-  const buildNewTaskForm = () => {
+  const newTaskForm = (() => {
     const container = document.createElement('li');
     container.classList.add('task-form-container');
     container.innerHTML = `
@@ -35,41 +37,44 @@ const newTaskForm = (() => {
           <label for="deadline">Deadline:</label>
           <input type="time" name="deadline" id="deadline" class="new-task-input">
         </p>
-        <button type="button" id="add-task" class="form-btn add">Add</button>
+        <button type="submit" id="add-task" class="form-btn add">Add</button>
         <button type="button" id="cancel" class="form-btn cancel">Cancel</button>
       </form>
     `
 
     return container
-  }
-
-  const newTaskForm = buildNewTaskForm();
+  })();
 
   const hideNewTaskForm = (ev) => {
+    newTaskForm.querySelector('#description').value = '';
+    newTaskForm.querySelector('#deadline').value = '';
     ev.target.closest('#list').removeChild(newTaskForm);
   };
+
+  const addNewTask = (ev) => {
+    ev.preventDefault();
+
+    const formData = new FormData(ev.target.closest('form'));
+    const formDataObj = {};
+
+    for (let entry of formData.entries()) {
+      formDataObj[entry[0]] = entry[1];
+    }
+
+    console.log(ev.target.closest('.main-container').querySelector('#main-heading').textContent);
+    pubsub.publish('newTaskFormSubmitted', formDataObj);
+
+    hideNewTaskForm(ev);
+  }
 
   const render = (newTaskBtn) => newTaskBtn.parentElement.insertBefore(newTaskForm, newTaskBtn);
 
   pubsub.subscribe('newTaskBtnClicked', render);
 
-  newTaskForm.querySelector('#cancel').addEventListener('click', hideNewTaskForm)
+  newTaskForm.querySelector('#cancel').addEventListener('click', hideNewTaskForm);
+  newTaskForm.querySelector('#add-task').addEventListener('click', addNewTask)
 
   return {
     render
   }
 })();
-
-
-
-// function showNewTaskForm(ev) {
-//   const prevElement = ev.target.previousElementSibling;
-
-//   if (prevElement.classList.contains('task-form-container')) return
-
-//   newTaskForm.render(prevElement.parentElement, ev.target);
-// }
-
-// const newTaskBtn = document.getElementById('new-task-btn');
-
-// newTaskBtn.addEventListener('click', showNewTaskForm);
