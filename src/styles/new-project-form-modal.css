@@ -1,0 +1,64 @@
+.modal-overlay {
+  position: fixed;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  opacity: 0;
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  /* width: 80%; */
+}
+
+.new-project-form {
+  display: grid;
+  /* grid-template-columns: repeat(6, 1fr); */
+  grid-template: 1fr 1fr min-content / 1fr 1fr;
+  gap: 10px;
+}
+
+.new-project-form p {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.new-project-form p label {
+  min-width: max-content;
+}
+
+.project-name-container {
+  grid-area: 2 / 1 / 3 / 2;
+}
+
+.project-deadline-container {
+  grid-area: 2 / 2 / 3 / 3;
+}
+
+.btn-container {
+  height: 100%;
+  grid-area: 3 / 1 / 4 / 3;
+  /* display: grid;
+  grid-template-columns: 1fr 1fr; */
+  /* height: 2rem; */
+  display: flex;
+  gap: 10px;
+}
+
+.btn-container button {
+  padding: 10px 0;
+}

@@ -5,6 +5,7 @@
 @import './task-list.css';
 @import './project-list.css';
 @import './new-task-form.css';
+@import './new-project-form-modal.css';
 
 *,
 *::before,
@@ -43,3 +44,20 @@ body {
 .wrapper > * {
   border-radius: 10px;
 }
+
+form {
+  padding: 20px;
+  border: 1px solid var(--primary-red);
+  border-radius: 10px;
+  background-color: #fefefe;
+  color: var(--primary-red);
+}
+
+input:focus {
+  outline: none;
+}
+
+/* form:hover,
+form > *:hover {
+  cursor: pointer;
+} */
