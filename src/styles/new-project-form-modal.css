@@ -8,6 +8,7 @@
   pointer-events: none;
   background-color: rgba(0, 0, 0, 0.25);
   z-index: 2;
+  transition: opacity 0.5s ease-in-out;
 }
 
 .modal-container {

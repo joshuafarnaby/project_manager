@@ -26,24 +26,39 @@ export const newProjectForm = (() => {
           <input type="date" id="deadline" name="deadline">
         </p>
         <div class="btn-container">
-          <button type="submit" id="add-project-btn" class="form-btn add" >Add Project</button>
-          <button type="button" id="cancel-add-project-btn" class="form-btn cancel">Cancel</button>
+          <button type="submit" id="add-btn" class="form-btn add" >Add Project</button>
+          <button type="button" id="cancel-btn" class="form-btn cancel">Cancel</button>
         </div>
       </form>
     `
 
     return container
-  })()
+  })();
 
-  const renderForm = (ev) => {
-    modalOverlay.classList.add('active');
-    newProjectForm.classList.add('active');
-  } 
+  const toggleFormVisibility = () => {
+    modalOverlay.classList.toggle('active');
+    newProjectForm.classList.toggle('active');
+  }
+
+  // const renderForm = () => {
+  //   modalOverlay.classList.add('active');
+  //   newProjectForm.classList.add('active');
+  // } 
+
+  // const hideForm = () => {
+  //   modalOverlay.classList.remove('active');
+  //   newProjectForm.classList.remove('active');
+  // }
 
   const insertForm = () => document.querySelector('.wrapper').appendChild(newProjectForm);
   const insertOverlay = () => document.querySelector('.wrapper').appendChild(modalOverlay);
 
-  pubsub.subscribe('newProjectBtnClicked', renderForm)
+  // pubsub.subscribe('newProjectBtnClicked', renderForm)
+  pubsub.subscribe('newProjectBtnClicked', toggleFormVisibility)
+
+  // newProjectForm.querySelector('#cancel-btn').addEventListener('click', hideForm)
+  newProjectForm.querySelector('#cancel-btn').addEventListener('click', toggleFormVisibility)
+
 
   return {
     insertOverlay,
