@@ -19,11 +19,11 @@ export const newProjectForm = (() => {
         <h2>New Project</h2>
         <p class="project-name-container">
           <label for="project-name">Name:</label>
-          <input type="text" id="project-name" name="name">
+          <input type="text" id="project-name" name="name" class="new-project-control">
         </p>
         <p class="project-deadline-container">
           <label for="deadline">Deadline:</label>
-          <input type="date" id="deadline" name="deadline">
+          <input type="date" id="deadline" name="deadline" class="new-project-control">
         </p>
         <div class="btn-container">
           <button type="submit" id="add-btn" class="form-btn add" >Add Project</button>

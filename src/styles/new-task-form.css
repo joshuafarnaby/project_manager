@@ -4,7 +4,8 @@
 
 .new-task-form {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template: min-content 1fr 1fr 1fr 1fr min-content / 1fr 1fr 1fr 1fr 1fr 1fr;
+  gap: 20px;
 }
 
 .new-task-form p {
@@ -12,7 +13,8 @@
   gap: 10px;
 }
 
-input {
+.new-task-control,
+.new-project-control {
   font-size: 1rem;
   padding: 0 5px;
   border-radius: 10px;
@@ -31,9 +33,25 @@ input {
   place-self: center;
 }
 
+.priority-container {
+  grid-column: 5 / 7;
+}
+
+.notes-container {
+  display: flex;
+  flex-direction: column;
+  grid-area: 2 / 1 / 6 / 7;
+}
+
+.notes-container textarea {
+  padding: 10px;
+  height: 300px;
+}
+
 .form-btn {
-  height: 100%;
-  width: 90%;
+  /* height: 100%; */
+  padding: 10px 0;
+  width: 100%;
   place-self: center;
   border-radius: 10px;
   border: none;
@@ -47,8 +65,10 @@ input {
 
 .add {
   background-color: var(--complete-green);
+  grid-area: 6 / 1 / 7 / 4;
 }
 
 .cancel {
   background-color: var(--primary-red);
+  grid-area: 6 / 4 / 7 / 7;
 }

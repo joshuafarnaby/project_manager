@@ -8,12 +8,24 @@ export const newTaskForm = (() => {
       <form action="#" method="post" class="new-task-form">
         <p class="description-container">
           <label for="description">Task:</label>
-          <input type="text" name="description" id="description" class="new-task-input">
+          <input type="text" name="description" id="description" class="new-task-control">
         </p>
         <p class="deadline-container">
           <label for="deadline">Deadline:</label>
-          <input type="time" name="deadline" id="deadline" class="new-task-input">
+          <input type="time" name="deadline" id="deadline" class="new-task-control">
         </p>
+        <p class="priority-container">
+          <label for="priority">Priority:</label>
+          <select name="priority" id="priority" class="new-task-control">
+            <option value="3">High</option>
+            <option value="2">Medium</option>
+            <option value="1">Low</option>
+          </select>
+        </p>
+        <p class="notes-container">
+          <label for="notes">Notes:</label>
+          <textarea name="notes" id="notes" class="new-task-control"></textarea>
+       </p>
         <button type="submit" id="add-task" class="form-btn add">Add</button>
         <button type="button" id="cancel" class="form-btn cancel">Cancel</button>
       </form>
