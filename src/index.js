@@ -7,11 +7,8 @@ import { newTaskForm } from './newTaskForm';
 import { newProjectForm } from './newProjectForm';
 import { pubsub } from './pubsub';
 
-const controller = (() => {
-  const currentTab = 'today';
 
-  sidebar.render();
-  mainDisplay.render();
-  newProjectForm.insertOverlay();
-  newProjectForm.insertForm();
-})();
+sidebar.render();
+mainDisplay.render();
+newProjectForm.insertOverlay();
+newProjectForm.insertForm();

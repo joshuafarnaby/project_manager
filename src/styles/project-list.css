@@ -6,7 +6,6 @@
 }
 
 .list-item.project {
-  /* min-height: 200px; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -16,7 +15,3 @@
 .project-name {
   text-align: center;
 }
-
-/* .list-item.project:hover .project-name {
-  text-decoration: underline;
-} */

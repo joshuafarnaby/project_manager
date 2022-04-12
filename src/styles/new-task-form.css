@@ -10,7 +10,6 @@
 .new-task-form p {
   display: flex;
   gap: 10px;
-  /* line-height: 1; */
 }
 
 input {
@@ -39,22 +38,15 @@ input {
   border-radius: 10px;
   border: none;
   color: #fefefe;
-
-  /* transition: transform 0.25s linear; */
 }
 
 .form-btn:hover {
   cursor: pointer;
   text-decoration: underline;
-  /* transform: scale(1.05); */
 }
 
 .add {
   background-color: var(--complete-green);
-}
-
-.add:hover {
-  /* box-shadow: 2px 2px 4px #555; */
 }
 
 .cancel {

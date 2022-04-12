@@ -31,8 +31,6 @@ export const sidebar = (() => {
   }
 
   const initiateTabChange = (ev) => {
-    // if (ev.target.classList.contains('clicked')) return
-
     const tab = ev.target.id;
 
     ev.target.parentElement.querySelector('.clicked').classList.remove('clicked');

@@ -8,9 +8,6 @@ li.task,
 .new-task-btn {
   display: flex;
   align-items: center;
-  /* border: 1px solid var(--primary-red);
-  padding: 5px 10px;
-  border-radius: 10px; */
 }
 
 .new-task-btn {

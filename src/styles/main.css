@@ -13,7 +13,6 @@
 .main-heading {
   line-height: 1;
   margin-bottom: 10px;
-  /* margin-bottom: 100px; */
 }
 
 .list {
@@ -42,15 +41,6 @@
   border-radius: 10px;
 }
 
-/* .list li:hover,
-.main-container button:hover {
-  box-shadow: 3px 3px 4px var(--primary-red);
-  cursor: pointer;
-  text-decoration: underline;
-} */
-
-/* .list > li:hover:not(.task-form-container), */
-/* .list > li.project:hover, */
 .new-project-btn:hover,
 .new-task-btn:hover {
   box-shadow: 3px 3px 4px var(--primary-red);

@@ -18,8 +18,6 @@
   transform: translate(-50%, -50%) scale(0);
   z-index: 3;
   transition: transform 0.25s ease-in-out;
-  /* transform: scale(0); */
-  /* width: 80%; */
 }
 
 .modal-overlay.active {
@@ -34,11 +32,8 @@
 
 .new-project-form {
   display: grid;
-  /* grid-template-columns: repeat(6, 1fr); */
-  /* grid-template: 1fr 1fr 1fr min-content / 1fr 1fr; */
   grid-template: repeat(4, min-content) / 1fr 1fr;
   gap: 20px;
-  /* transform: scale(0); */
 }
 
 .new-project-form p {
@@ -66,9 +61,6 @@
 .btn-container {
   height: 100%;
   grid-area: 4 / 1 / 5 / 3;
-  /* display: grid;
-  grid-template-columns: 1fr 1fr; */
-  /* height: 2rem; */
   display: flex;
   gap: 10px;
 }

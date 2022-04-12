@@ -38,7 +38,6 @@ export const newTaskForm = (() => {
       formDataObj[entry[0]] = entry[1];
     }
 
-    // console.log(ev.target.closest('.main-container').querySelector('#main-heading').textContent);
     pubsub.publish('newTaskFormSubmitted', formDataObj);
 
     hideNewTaskForm(ev);
