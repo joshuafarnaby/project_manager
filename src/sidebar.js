@@ -31,7 +31,7 @@ export const sidebar = (() => {
   }
 
   const initiateTabChange = (ev) => {
-    if (ev.target.classList.contains('clicked')) return
+    // if (ev.target.classList.contains('clicked')) return
 
     const tab = ev.target.id;
 

@@ -42,7 +42,6 @@ export const mainDisplay = (() => {
   const listContainer = mainDisplaySkeleton.querySelector('#list');
   let currentProject;
 
-
   const requestSingleProject = (ev) => {
     const id = ev.target.localName == 'p' 
       ? ev.target.parentElement.getAttribute('id')
@@ -100,8 +99,6 @@ export const mainDisplay = (() => {
 
     currentProject = project;
     listContainer.appendChild(newTaskBtn);
-
-    console.log(currentProject);
   }
 
   const renderNewTask = (formDataObj) => {
@@ -118,11 +115,8 @@ export const mainDisplay = (() => {
 
     listContainer.insertBefore(li, listContainer.lastElementChild);
     currentProject.addTask(formDataObj.description, formDataObj.deadline);
-
-    console.log(currentProject.tasks);
+    currentProject.saveToLocalStorage();
   }
-
-
 
   const render = () => {
     document.querySelector('.wrapper').appendChild(mainDisplaySkeleton);
