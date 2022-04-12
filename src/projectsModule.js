@@ -28,8 +28,6 @@ function Task(description, deadline, isComplete = false) {
   this.isComplete = isComplete;
 }
 
-// const project1 = new Project('Very boring work project', '24-04-2022');
-
 const monday = new Project('Monday', 'default');
 const tuesday = new Project('Tuesday', 'default');
 const wednesday = new Project('Wednesday', 'default');
@@ -37,17 +35,6 @@ const thursday = new Project('Thursday', 'default');
 const friday = new Project('Friday', 'default');
 const saturday = new Project('Saturday', 'default');
 const sunday = new Project('Sunday', 'default');
-
-// monday.addTask('Go to the gym');
-// monday.addTask('Walk the dog', '16:00');
-// monday.addTask('Buy groceries', '12:00');
-// monday.addTask('Go for a run', '18:00');
-
-// wednesday.addTask('Feed the dragon', '15:00');
-// wednesday.addTask('Duel the neighbour', '16:00');
-// wednesday.addTask('Duel the other neighbour', '12:00');
-// wednesday.addTask('Find the ring', '18:00');
-
 
 export const projectsModule = (() => {
   const projects = [];
@@ -89,7 +76,7 @@ export const projectsModule = (() => {
     if (tabName == 'projects') {
       sendProjectSummary('All Projects', projects);
     } else if (tabName == 'week') {
-      sendProjectSummary('Week', weekdays)
+      sendProjectSummary('Week', weekdays);
     } else {
       sendDefaultProject();
     }
@@ -110,11 +97,9 @@ export const projectsModule = (() => {
   const loadDefaultProjects = (projectList) => {
     weekdays.forEach(day => {
       projectList.forEach(project => {
-        if (day.name == project.name) {
-          project.tasks.forEach(task => {
-            day.addTask(task.description, task.deadline)
-          })
-        }
+        if (day.name != project.name) return
+
+        project.tasks.forEach(task => day.addTask(task.description, task.deadline));
       })
     })
   }
@@ -133,22 +118,8 @@ export const projectsModule = (() => {
     const keys = getAllLocalStorageKeys(); 
     const savedProjects = keys.map(key => JSON.parse(window.localStorage.getItem(key)));
 
-    // console.log(savedProjects);
-
-    // console.log(savedProjects.filter(project => project.type == 'default'));
-
     loadDefaultProjects(savedProjects.filter(project => project.type == 'default'));
     loadCustomProjects(savedProjects.filter(project => project.type == 'custom'));
-    
-    // savedProjects.forEach(project => {
-    //   const newProject = new Project(project.name, project.deadline)
-
-    //   project.tasks.forEach(task => {
-    //     newProject.addTask(task.description, task.deadline, task.isComplete)
-    //   })
-
-    //   projects.push(newProject);
-    // })
   }
 
   loadSavedProjects();
