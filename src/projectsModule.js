@@ -1,8 +1,9 @@
 import { pubsub } from "./pubsub";
 
-function Project(name, deadline = null) {
+function Project(name, type = 'custom', deadline = null) {
   this.name = name;
   this.deadline = deadline;
+  this.type = type;
   this.tasks = [];
 
   this.addTask = function (description, deadline) {
@@ -13,6 +14,7 @@ function Project(name, deadline = null) {
     const saveData = {
       name: this.name,
       deadline: this.deadline,
+      type: this.type,
       tasks: this.tasks
     }
 
@@ -28,13 +30,13 @@ function Task(description, deadline, isComplete = false) {
 
 // const project1 = new Project('Very boring work project', '24-04-2022');
 
-const monday = new Project('Monday');
-const tuesday = new Project('Tuesday');
-const wednesday = new Project('Wednesday');
-const thursday = new Project('Thursday');
-const friday = new Project('Friday');
-const saturday = new Project('Saturday');
-const sunday = new Project('Sunday');
+const monday = new Project('Monday', 'default');
+const tuesday = new Project('Tuesday', 'default');
+const wednesday = new Project('Wednesday', 'default');
+const thursday = new Project('Thursday', 'default');
+const friday = new Project('Friday', 'default');
+const saturday = new Project('Saturday', 'default');
+const sunday = new Project('Sunday', 'default');
 
 // monday.addTask('Go to the gym');
 // monday.addTask('Walk the dog', '16:00');
@@ -74,7 +76,7 @@ export const projectsModule = (() => {
 
   const createNewProject = (formDataObj) => {
     const formatDeadline = formDataObj.deadline.split('-').reverse().join('-');
-    const newProject = new Project(formDataObj.name, formatDeadline == '' ? null : formatDeadline);
+    const newProject = new Project(formDataObj.name, 'custom', formatDeadline == '' ? null : formatDeadline);
 
     projects.push(newProject)
 
@@ -93,6 +95,30 @@ export const projectsModule = (() => {
     }
   }
 
+  const loadCustomProjects = (projectList) => {
+    projectList.forEach(project => {
+      const newProject = new Project(project.name, project.deadline)
+
+      project.tasks.forEach(task => {
+        newProject.addTask(task.description, task.deadline, task.isComplete)
+      })
+
+      projects.push(newProject);
+    })
+  }
+
+  const loadDefaultProjects = (projectList) => {
+    weekdays.forEach(day => {
+      projectList.forEach(project => {
+        if (day.name == project.name) {
+          project.tasks.forEach(task => {
+            day.addTask(task.description, task.deadline)
+          })
+        }
+      })
+    })
+  }
+
   const getAllLocalStorageKeys = () => {
     const keys = [];
 
@@ -106,16 +132,23 @@ export const projectsModule = (() => {
   const loadSavedProjects = () => {
     const keys = getAllLocalStorageKeys(); 
     const savedProjects = keys.map(key => JSON.parse(window.localStorage.getItem(key)));
+
+    // console.log(savedProjects);
+
+    // console.log(savedProjects.filter(project => project.type == 'default'));
+
+    loadDefaultProjects(savedProjects.filter(project => project.type == 'default'));
+    loadCustomProjects(savedProjects.filter(project => project.type == 'custom'));
     
-    savedProjects.forEach(project => {
-      const newProject = new Project(project.name, project.deadline)
+    // savedProjects.forEach(project => {
+    //   const newProject = new Project(project.name, project.deadline)
 
-      project.tasks.forEach(task => {
-        newProject.addTask(task.description, task.deadline, task.isComplete)
-      })
+    //   project.tasks.forEach(task => {
+    //     newProject.addTask(task.description, task.deadline, task.isComplete)
+    //   })
 
-      projects.push(newProject);
-    })
+    //   projects.push(newProject);
+    // })
   }
 
   loadSavedProjects();
