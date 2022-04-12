@@ -50,12 +50,13 @@
 
 .form-btn {
   /* height: 100%; */
-  padding: 10px 0;
+  padding: 20px 0;
   width: 100%;
   place-self: center;
   border-radius: 10px;
   border: none;
   color: #fefefe;
+  font-size: 1rem;
 }
 
 .form-btn:hover {

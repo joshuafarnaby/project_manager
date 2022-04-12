@@ -2,10 +2,12 @@ import { pubsub } from "./pubsub";
 
 export const projectsModule = (() => {
   const Project = (name, type = 'custom', deadline = null) => {
-    const Task = (description, deadline, isComplete = false) => {
+    const Task = (description, deadline, priority, notes, isComplete = false) => {
       return {
         description,
         deadline,
+        priority,
+        notes,
         isComplete
       }
     }
@@ -15,8 +17,10 @@ export const projectsModule = (() => {
       type,
       tasks: [],
       deadline,
-      addTask(description, deadline) {
-        this.tasks.push(Task(description, deadline))
+      addTask(description, deadline, priority, notes) {
+        this.tasks.push(Task(description, deadline, priority, notes))
+
+        console.log(this);
       },
       saveToLocalStorage() {
         localStorage.setItem(this.name, JSON.stringify({

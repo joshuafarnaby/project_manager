@@ -114,7 +114,7 @@ export const mainDisplay = (() => {
     li.querySelector('.checkbox').addEventListener('click', (e) => e.target.parentElement.classList.toggle('complete'));
 
     listContainer.insertBefore(li, listContainer.lastElementChild);
-    currentProject.addTask(formDataObj.description, formDataObj.deadline);
+    currentProject.addTask(formDataObj.description, formDataObj.deadline, formDataObj.priority, formDataObj.notes);
     currentProject.saveToLocalStorage();
   }
 

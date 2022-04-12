@@ -35,8 +35,8 @@ export const newTaskForm = (() => {
   })();
 
   const hideNewTaskForm = (ev) => {
-    newTaskForm.querySelector('#description').value = '';
-    newTaskForm.querySelector('#deadline').value = '';
+    newTaskForm.querySelectorAll('.new-task-control').forEach(control => control.value = '');
+
     ev.target.closest('#list').removeChild(newTaskForm);
   };
 
@@ -47,6 +47,9 @@ export const newTaskForm = (() => {
     const formDataObj = {};
 
     for (let entry of formData.entries()) {
+      // rudimentary form validation - will be fleshed out
+      if (!entry[1]) return
+
       formDataObj[entry[0]] = entry[1];
     }
 
