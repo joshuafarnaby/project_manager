@@ -13,6 +13,10 @@
   align-items: center;
 }
 
+.project-name {
+  text-align: center;
+}
+
 /* .list-item.project:hover .project-name {
   text-decoration: underline;
 } */

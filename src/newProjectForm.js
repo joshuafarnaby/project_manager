@@ -38,27 +38,32 @@ export const newProjectForm = (() => {
   const toggleFormVisibility = () => {
     modalOverlay.classList.toggle('active');
     newProjectForm.classList.toggle('active');
+    newProjectForm.querySelector('#project-name').value = '';
+    newProjectForm.querySelector('#deadline').value = '';
   }
 
-  // const renderForm = () => {
-  //   modalOverlay.classList.add('active');
-  //   newProjectForm.classList.add('active');
-  // } 
+  const addNewProject = (ev) => {
+    ev.preventDefault();
 
-  // const hideForm = () => {
-  //   modalOverlay.classList.remove('active');
-  //   newProjectForm.classList.remove('active');
-  // }
+    const fd = new FormData(ev.target.closest('form'));
+    const formDataObj = {};
+
+    for (let entry of fd.entries()) {
+      formDataObj[entry[0]] = entry[1];
+    }
+
+    pubsub.publish('newProjectFormSubmitted', formDataObj);
+    toggleFormVisibility();
+  }
 
   const insertForm = () => document.querySelector('.wrapper').appendChild(newProjectForm);
   const insertOverlay = () => document.querySelector('.wrapper').appendChild(modalOverlay);
 
-  // pubsub.subscribe('newProjectBtnClicked', renderForm)
   pubsub.subscribe('newProjectBtnClicked', toggleFormVisibility)
 
-  // newProjectForm.querySelector('#cancel-btn').addEventListener('click', hideForm)
-  newProjectForm.querySelector('#cancel-btn').addEventListener('click', toggleFormVisibility)
 
+  newProjectForm.querySelector('#cancel-btn').addEventListener('click', toggleFormVisibility)
+  newProjectForm.querySelector('#add-btn').addEventListener('click', addNewProject)
 
   return {
     insertOverlay,

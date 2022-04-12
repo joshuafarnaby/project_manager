@@ -16,23 +16,7 @@ function Task(description, deadline) {
   this.isComplete = false;
 }
 
-// const project1 = {
-//   name: 'Project 1',
-//   deadline: '24-04-2022'
-// }
-
-// const project2 = {
-//   name: 'Project 2',
-//   deadline: '14-05-2022'
-// }
-
-// const project3 = {
-//   name: 'Project 3',
-//   deadline: '01-06-2022'
-// }
-
 const project1 = new Project('Very boring work project', '24-04-2022')
-
 
 const monday = new Project('Monday');
 const tuesday = new Project('Tuesday');
@@ -51,8 +35,6 @@ wednesday.addTask('Feed the dragon', '15:00');
 wednesday.addTask('Duel the neighbour', '16:00');
 wednesday.addTask('Duel the other neighbour', '12:00');
 wednesday.addTask('Find the ring', '18:00');
-
-// console.log(monday);
 
 
 export const projectsModule = (() => {
@@ -81,6 +63,15 @@ export const projectsModule = (() => {
 
     pubsub.publish('singleProjectRetrieved', weekdays[day]);
   }
+
+  const createNewProject = (formDataObj) => {
+    const formatDeadline = formDataObj.deadline.split('-').reverse().join('-');
+    const newProject = new Project(formDataObj.name, formatDeadline);
+
+    projects.push(newProject)
+
+    pubsub.publish('singleProjectRetrieved', newProject)
+  }
   
   const handleTabChange = (tabName) => {
     if (tabName == 'projects') {
@@ -94,5 +85,6 @@ export const projectsModule = (() => {
 
   pubsub.subscribe('mainDisplayRendered', sendDefaultProject);
   pubsub.subscribe('tabChanged', handleTabChange);
-  pubsub.subscribe('singleProjectRequested', sendSingleProject)
+  pubsub.subscribe('singleProjectRequested', sendSingleProject);
+  pubsub.subscribe('newProjectFormSubmitted', createNewProject)
 })();
