@@ -26,8 +26,8 @@ export const projectsModule = (() => {
 
         return newTask
       },
-      getTask(taskDescription) {
-        return this.tasks.filter(task => task.description == taskDescription)[0];
+      getTask(taskID) {
+        return this.tasks.filter(task => task.id == taskID)[0];
       },
       deleteTask(taskDescription) {
         const taskToDelete = this.tasks.filter(task => task.description == taskDescription)[0];
@@ -58,13 +58,13 @@ export const projectsModule = (() => {
     Project({ name: 'Sunday', type: 'default' })
   ];
 
-  const getProject = (id) => [...projects, ...weekdays].filter(project => project.name == id)[0];
+  const getProject = (id) => [...projects, ...weekdays].filter(project => project.id == id)[0];
 
   const sendProjectSummary = (heading, projectList) => {
     pubsub.publish('projectsRetrieved', { 
       heading, 
       projectsInfo: projectList.map(project => {
-        return { name: project.name, deadline: project.deadline }
+        return { name: project.name, deadline: project.deadline, id: project.id }
       })});
   }
 
@@ -98,7 +98,7 @@ export const projectsModule = (() => {
   }
 
   const addNewTask = ({ description, deadline, priority, notes, projectID, isComplete }) => {
-    const project = [...projects, ...weekdays].filter(project => project.id == projectID)[0];
+    const project = getProject(projectID);
     const newTask = project.addTask({ description, deadline, priority, notes, isComplete});
 
     project.saveToLocalStorage();
@@ -124,11 +124,11 @@ export const projectsModule = (() => {
     })
   }
 
-  const updateTaskCompleteState = (projectTask) => {
-    const project = getProject(projectTask[0]);
-    const task = project.tasks.filter(t => t.description == projectTask[1])[0];
+  const updateTaskCompleteState = ({ projectID, taskID }) => {
+    const project = getProject(projectID);
+    const task = project.getTask(taskID);
 
-    task.isComplete = !task.isComplete;
+    task.isComplete = !task.isComplete
     project.saveToLocalStorage();
   }
 

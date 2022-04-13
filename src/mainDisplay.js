@@ -45,8 +45,8 @@ export const mainDisplay = (() => {
 
   const requestSingleProject = (ev) => {
     const id = ev.target.localName == 'p' 
-      ? ev.target.parentElement.getAttribute('id')
-      : ev.target.getAttribute('id');
+      ? ev.target.parentElement.getAttribute('data-project-id')
+      : ev.target.getAttribute('data-project-id');
 
     pubsub.publish('singleProjectRequested', id);
   }
@@ -58,13 +58,12 @@ export const mainDisplay = (() => {
     const projectID = ev.target.closest('ul').getAttribute('data-project-id');
     const taskID = ev.target.closest('li').getAttribute('data-task-id');
 
-    console.log(projectID);
-    console.log(taskID);
-
-    // pubsub.publish('completeToggled', [projectName, taskDescription]);
+    // pubsub.publish('completeToggled', { projectID: projectID, taskID: taskID });
+    pubsub.publish('completeToggled', { projectID, taskID });
   }
 
   const renderProjectList = (projectData) => {
+    console.log(projectData);
     mainHeading.textContent = projectData.heading;
     listContainer.innerHTML = '';
     listContainer.setAttribute('class', 'list multiple-projects');
@@ -73,7 +72,8 @@ export const mainDisplay = (() => {
     projectData.projectsInfo.forEach(project => {
       const li = document.createElement('li');
       li.setAttribute('class', 'list-item project');
-      li.setAttribute('id', project.name)
+      // li.setAttribute('id', project.name);
+      li.setAttribute('data-project-id', project.id);
 
       li.innerHTML = `
         <p class="project-name">${project.name}</p>
