@@ -52,6 +52,8 @@ export const newProjectForm = (() => {
       formDataObj[entry[0]] = entry[1];
     }
 
+    formDataObj.type = 'custom';
+
     pubsub.publish('newProjectFormSubmitted', formDataObj);
     toggleFormVisibility();
   }

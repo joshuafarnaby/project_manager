@@ -60,6 +60,7 @@ export const mainDisplay = (() => {
   }
 
   const renderProjectList = (projectData) => {
+    console.log(projectData);
     mainHeading.textContent = projectData.heading;
     listContainer.innerHTML = '';
     listContainer.setAttribute('class', 'list multiple-projects');
@@ -85,6 +86,7 @@ export const mainDisplay = (() => {
   }
 
   const renderSingleProject = (project) => {
+    // console.log(project);
     mainHeading.textContent = project.name;
     listContainer.innerHTML = '';
     listContainer.setAttribute('class', 'list single-project');
@@ -151,7 +153,8 @@ export const mainDisplay = (() => {
     })
 
     listContainer.insertBefore(li, listContainer.lastElementChild);
-    currentProject.addTask(formDataObj.description, formDataObj.deadline, formDataObj.priority, formDataObj.notes);
+    formDataObj.isComplete = false;
+    currentProject.addTask(formDataObj);
     currentProject.saveToLocalStorage();
   }
  

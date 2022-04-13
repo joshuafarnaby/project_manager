@@ -1,24 +1,27 @@
 import { pubsub } from "./pubsub";
+import { generateUniqueID } from "./utilities";
 
 export const projectsModule = (() => {
-  const Project = (name, type = 'custom', deadline = null) => {
-    const Task = (description, deadline, priority, notes, isComplete = false) => {
+  const Project = ({ name, type, deadline, id }) => {
+    const Task = (description, deadline, priority, notes, isComplete, id) => {
       return {
         description,
         deadline,
         priority,
         notes,
-        isComplete
+        isComplete,
+        id: id || generateUniqueID()
       }
     }
   
     return {
       name,
       type,
+      deadline: deadline || null,
+      id: id || generateUniqueID(),
       tasks: [],
-      deadline,
-      addTask(description, deadline, priority, notes, isComplete) {
-        this.tasks.push(Task(description, deadline, priority, notes, isComplete))
+      addTask({ description, deadline, priority, notes, isComplete, id }) {
+        this.tasks.push(Task(description, deadline, priority, notes, isComplete, id));
       },
       getTask(taskDescription) {
         return this.tasks.filter(task => task.description == taskDescription)[0];
@@ -27,7 +30,6 @@ export const projectsModule = (() => {
         const taskToDelete = this.tasks.filter(task => task.description == taskDescription)[0];
 
         this.tasks.splice(this.tasks.indexOf(taskToDelete), 1);
-
         this.saveToLocalStorage();
       },
       saveToLocalStorage() {
@@ -35,7 +37,8 @@ export const projectsModule = (() => {
           name: this.name,
           deadline: this.deadline,
           type: this.type,
-          tasks: this.tasks
+          tasks: this.tasks,
+          id: this.id
         }));
       }
     }
@@ -43,13 +46,13 @@ export const projectsModule = (() => {
 
   const projects = [];
   const weekdays = [
-    Project('Monday', 'default'),
-    Project('Tuesday', 'default'),
-    Project('Wednesday', 'default'),
-    Project('Thursday', 'default'),
-    Project('Friday', 'default'),
-    Project('Saturday', 'default'),
-    Project('Sunday', 'default')
+    Project({ name: 'Monday', type: 'default' }),
+    Project({ name: 'Tuesday', type: 'default' }),
+    Project({ name: 'Wednesday', type: 'default' }),
+    Project({ name: 'Thursday', type: 'default' }),
+    Project({ name: 'Friday', type: 'default' }),
+    Project({ name: 'Saturday', type: 'default' }),
+    Project({ name: 'Sunday', type: 'default' })
   ];
 
   const getProject = (id) => [...projects, ...weekdays].filter(project => project.name == id)[0];
@@ -73,9 +76,9 @@ export const projectsModule = (() => {
     pubsub.publish('singleProjectRetrieved', weekdays[day]);
   }
 
-  const createNewProject = (formDataObj) => {
-    const formatDeadline = formDataObj.deadline.split('-').reverse().join('-');
-    const newProject = Project(formDataObj.name, 'custom', formatDeadline == '' ? null : formatDeadline);
+  const createNewProject = ({ name, deadline, type }) => {
+    const formatDeadline = deadline.split('-').reverse().join('-');
+    const newProject = Project(name, type, formatDeadline == '' ? null : formatDeadline);
 
     projects.push(newProject)
     newProject.saveToLocalStorage();
@@ -90,12 +93,9 @@ export const projectsModule = (() => {
 
   const loadCustomProjects = (projectList) => {
     projectList.forEach(project => {
-      const newProject = Project(project.name, project.type, project.deadline)
+      const newProject = Project(project);
 
-      project.tasks.forEach(task => {
-        newProject.addTask(task.description, task.deadline, task.priority, task.notes, task.isComplete)
-      })
-
+      project.tasks.forEach(task => newProject.addTask(task))
       projects.push(newProject);
     })
   }
@@ -105,7 +105,7 @@ export const projectsModule = (() => {
       projectList.forEach(project => {
         if (day.name != project.name) return
 
-        project.tasks.forEach(task => day.addTask(task.description, task.deadline, task.priority, task.notes, task.isComplete))
+        project.tasks.forEach(task => day.addTask(task));
       })
     })
   }
@@ -131,8 +131,6 @@ export const projectsModule = (() => {
   const loadSavedProjects = () => {
     const keys = getAllLocalStorageKeys(); 
     const savedProjects = keys.map(key => JSON.parse(window.localStorage.getItem(key)));
-
-    // console.log(savedProjects);
 
     loadDefaultProjects(savedProjects.filter(project => project.type == 'default'));
     loadCustomProjects(savedProjects.filter(project => project.type == 'custom'));

@@ -6,7 +6,8 @@ import { projectsModule } from './projectsModule';
 import { newTaskForm } from './newTaskForm';
 import { newProjectForm } from './newProjectForm';
 import { taskModalModule } from './taskModal';
-import { pubsub } from './pubsub';
+import { generateUniqueID } from "./utilities";
+// import { pubsub } from './pubsub';
 
 const modalOverlay = (() => {
   const div = document.createElement('div');
