@@ -17,10 +17,8 @@ export const projectsModule = (() => {
       type,
       tasks: [],
       deadline,
-      addTask(description, deadline, priority, notes) {
-        this.tasks.push(Task(description, deadline, priority, notes))
-
-        console.log(this);
+      addTask(description, deadline, priority, notes, isComplete) {
+        this.tasks.push(Task(description, deadline, priority, notes, isComplete))
       },
       saveToLocalStorage() {
         localStorage.setItem(this.name, JSON.stringify({
@@ -29,6 +27,8 @@ export const projectsModule = (() => {
           type: this.type,
           tasks: this.tasks
         }));
+
+        // console.log(this);
       }
     }
   }
@@ -71,7 +71,7 @@ export const projectsModule = (() => {
 
     projects.push(newProject)
     newProject.saveToLocalStorage();
-    pubsub.publish('singleProjectRetrieved', newProject)
+    pubsub.publish('singleProjectRetrieved', newProject);
   }
   
   const handleTabChange = (tabName) => {
@@ -82,10 +82,10 @@ export const projectsModule = (() => {
 
   const loadCustomProjects = (projectList) => {
     projectList.forEach(project => {
-      const newProject = Project(project.name, project.deadline)
+      const newProject = Project(project.name, project.type, project.deadline)
 
       project.tasks.forEach(task => {
-        newProject.addTask(task.description, task.deadline, task.isComplete)
+        newProject.addTask(task.description, task.deadline, task.priority, task.notes, task.isComplete)
       })
 
       projects.push(newProject);
@@ -97,9 +97,17 @@ export const projectsModule = (() => {
       projectList.forEach(project => {
         if (day.name != project.name) return
 
-        project.tasks.forEach(task => day.addTask(task.description, task.deadline));
+        project.tasks.forEach(task => day.addTask(task.description, task.deadline, task.priority, task.notes, task.isComplete))
       })
     })
+  }
+
+  const updateTaskCompleteState = (projectTask) => {
+    const project = getProject(projectTask[0]);
+    const task = project.tasks.filter(t => t.description == projectTask[1])[0];
+
+    task.isComplete = !task.isComplete;
+    project.saveToLocalStorage();
   }
 
   const getAllLocalStorageKeys = () => {
@@ -116,14 +124,16 @@ export const projectsModule = (() => {
     const keys = getAllLocalStorageKeys(); 
     const savedProjects = keys.map(key => JSON.parse(window.localStorage.getItem(key)));
 
+    // console.log(savedProjects);
+
     loadDefaultProjects(savedProjects.filter(project => project.type == 'default'));
     loadCustomProjects(savedProjects.filter(project => project.type == 'custom'));
   }
-
   loadSavedProjects();
 
   pubsub.subscribe('mainDisplayRendered', sendDefaultProject);
   pubsub.subscribe('tabChanged', handleTabChange);
   pubsub.subscribe('singleProjectRequested', sendSingleProject);
-  pubsub.subscribe('newProjectFormSubmitted', createNewProject)
+  pubsub.subscribe('newProjectFormSubmitted', createNewProject);
+  pubsub.subscribe('completeToggled', updateTaskCompleteState)
 })();

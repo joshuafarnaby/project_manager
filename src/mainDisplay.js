@@ -50,6 +50,14 @@ export const mainDisplay = (() => {
     pubsub.publish('singleProjectRequested', id);
   }
 
+  const toggleComplete = (ev) => {
+    ev.target.parentElement.classList.toggle('complete');
+    const projectName = document.querySelector('#main-heading').textContent;
+    const taskDescription = ev.target.nextElementSibling.textContent;
+
+    pubsub.publish('completeToggled', [projectName, taskDescription]);
+  }
+
   const renderProjectList = (projectData) => {
     mainHeading.textContent = projectData.heading;
     listContainer.innerHTML = '';
@@ -76,6 +84,7 @@ export const mainDisplay = (() => {
   }
 
   const renderSingleProject = (project) => {
+    // console.log(project);
     mainHeading.textContent = project.name;
     listContainer.innerHTML = '';
     listContainer.setAttribute('class', 'list single-project');
@@ -84,7 +93,8 @@ export const mainDisplay = (() => {
 
     project.tasks.forEach(task => {
       const li = document.createElement('li');
-      li.setAttribute('class', 'list-item task');
+      // console.log(task);
+      task.isComplete ? li.setAttribute('class', 'list-item task complete') : li.setAttribute('class', 'list-item task');
 
       li.innerHTML = `
         <div class="checkbox"></div>
@@ -92,7 +102,9 @@ export const mainDisplay = (() => {
         <p class="task-deadline">${task.deadline ? task.deadline : 'Anytime'}</p>
       `
 
-      li.querySelector('.checkbox').addEventListener('click', (e) => e.target.parentElement.classList.toggle('complete'));
+      // li.querySelector('.checkbox').addEventListener('click', (e) => e.target.parentElement.classList.toggle('complete'));
+      li.querySelector('.checkbox').addEventListener('click', toggleComplete);
+
 
       listContainer.appendChild(li);
     })
@@ -111,7 +123,8 @@ export const mainDisplay = (() => {
       <p class="task-deadline">${formDataObj.deadline ? formDataObj.deadline : 'Anytime'}</p>
     `
 
-    li.querySelector('.checkbox').addEventListener('click', (e) => e.target.parentElement.classList.toggle('complete'));
+    // li.querySelector('.checkbox').addEventListener('click', (e) => e.target.parentElement.classList.toggle('complete'));
+    li.querySelector('.checkbox').addEventListener('click', toggleComplete);
 
     listContainer.insertBefore(li, listContainer.lastElementChild);
     currentProject.addTask(formDataObj.description, formDataObj.deadline, formDataObj.priority, formDataObj.notes);
