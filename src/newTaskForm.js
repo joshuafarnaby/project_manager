@@ -17,9 +17,9 @@ export const newTaskForm = (() => {
         <p class="priority-container">
           <label for="priority">Priority:</label>
           <select name="priority" id="priority" class="new-task-control">
-            <option value="3">High</option>
-            <option value="2">Medium</option>
-            <option value="1">Low</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
           </select>
         </p>
         <p class="notes-container">

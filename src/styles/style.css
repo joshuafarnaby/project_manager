@@ -18,7 +18,11 @@
 
 :root {
   --primary-red: #ef4444;
+  --primary-red-50: #ef444485;
   --complete-green: #4ade80;
+  --complete-green-50: #4ade8083;
+  --blue: #38bdf8;
+  --blue-50: #38bff888;
 }
 
 body {

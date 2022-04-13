@@ -20,6 +20,9 @@ export const projectsModule = (() => {
       addTask(description, deadline, priority, notes, isComplete) {
         this.tasks.push(Task(description, deadline, priority, notes, isComplete))
       },
+      getTask(taskDescription) {
+        return this.tasks.filter(task => task.description == taskDescription)[0];
+      },
       saveToLocalStorage() {
         localStorage.setItem(this.name, JSON.stringify({
           name: this.name,

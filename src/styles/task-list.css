@@ -4,6 +4,10 @@
   gap: 10px;
 }
 
+li.task {
+  position: relative;
+}
+
 li.task,
 .new-task-btn {
   display: flex;
@@ -36,6 +40,35 @@ li.task,
 
 .task-name {
   margin-right: auto;
+}
+
+.task-deadline {
+  margin-right: 50px;
+}
+
+.task-priority {
+  position: absolute;
+  height: 100%;
+  /* background-color: var(--primary-red); */
+  width: 20px;
+  right: 0px;
+  border-bottom-right-radius: 9px;
+  border-top-right-radius: 9px;
+  /* background-color: #38bdf8; */
+  border-left: 1px solid var(--primary-red);
+  /* opacity: 0.5; */
+}
+
+.task-priority.high {
+  background-color: var(--primary-red-50);
+}
+
+.task-priority.medium {
+  background-color: var(--blue-50);
+}
+
+.task-priority.low {
+  background-color: var(--complete-green-50);
 }
 
 .list.single-project li.complete .checkbox {

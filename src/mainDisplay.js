@@ -84,7 +84,6 @@ export const mainDisplay = (() => {
   }
 
   const renderSingleProject = (project) => {
-    // console.log(project);
     mainHeading.textContent = project.name;
     listContainer.innerHTML = '';
     listContainer.setAttribute('class', 'list single-project');
@@ -100,11 +99,23 @@ export const mainDisplay = (() => {
         <div class="checkbox"></div>
         <p class="task-name">${task.description}</p>
         <p class="task-deadline">${task.deadline ? task.deadline : 'Anytime'}</p>
+        <p class="task-priority ${task.priority}"></p>
       `
 
-      // li.querySelector('.checkbox').addEventListener('click', (e) => e.target.parentElement.classList.toggle('complete'));
       li.querySelector('.checkbox').addEventListener('click', toggleComplete);
 
+      // li.addEventListener('click', (e) => {
+      //   if (e.target.classList.contains('checkbox')) return 
+
+      //   const taskDescription = e.target.localName == li 
+      //     ? e.target.querySelector('.task-name').textContent
+      //     : e.target.closest('li').querySelector('.task-name').textContent
+
+        
+      //   const task = currentProject.getTask(taskDescription)
+
+      //   console.log(task);
+      // })
 
       listContainer.appendChild(li);
     })
@@ -121,6 +132,7 @@ export const mainDisplay = (() => {
       <div class="checkbox"></div>
       <p class="task-name">${formDataObj.description}</p>
       <p class="task-deadline">${formDataObj.deadline ? formDataObj.deadline : 'Anytime'}</p>
+      <p class="task-priority ${formDataObj.priority}"></p>
     `
 
     // li.querySelector('.checkbox').addEventListener('click', (e) => e.target.parentElement.classList.toggle('complete'));
