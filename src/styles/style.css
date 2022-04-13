@@ -6,6 +6,7 @@
 @import './project-list.css';
 @import './new-task-form.css';
 @import './new-project-form-modal.css';
+@import './taskModal.css';
 
 *,
 *::before,

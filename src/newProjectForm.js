@@ -11,7 +11,7 @@ export const newProjectForm = (() => {
 
   const newProjectForm = (() => {
     const container = document.createElement('div');
-    container.setAttribute('id', 'modal-container');
+    // container.setAttribute('id', 'modal-container');
     container.setAttribute('class', 'modal-container');
 
     container.innerHTML = `

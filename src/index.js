@@ -5,6 +5,7 @@ import { mainDisplay } from './mainDisplay';
 import { projectsModule } from './projectsModule';
 import { newTaskForm } from './newTaskForm';
 import { newProjectForm } from './newProjectForm';
+import { taskModalModule } from './taskModal';
 import { pubsub } from './pubsub';
 
 const modalOverlay = (() => {
@@ -14,7 +15,6 @@ const modalOverlay = (() => {
 
   const insertOverlay = () => document.querySelector('.wrapper').appendChild(div);
 
-  // return div
   return {
     insertOverlay
   }
@@ -25,3 +25,4 @@ mainDisplay.render();
 // newProjectForm.insertOverlay();
 newProjectForm.insertForm();
 modalOverlay.insertOverlay()
+taskModalModule.insertTaskModal();

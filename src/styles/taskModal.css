@@ -1,0 +1,53 @@
+.task-modal {
+  background-color: #fefefe;
+  border-radius: 10px;
+  border: 1px solid var(--primary-red);
+  color: var(--primary-red);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 600px;
+}
+
+.notes {
+  border-radius: inherit;
+  border: inherit;
+  padding: 10px;
+  min-height: 400px;
+}
+
+.task-modal-btns-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.task-modal-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.task-modal-btn.back {
+  background-color: #fefefe;
+  border: 1px solid var(--primary-red);
+  color: var(--primary-red);
+}
+
+.task-modal-btn.edit {
+  background-color: #fefefe;
+  border: 1px solid var(--blue);
+  color: var(--blue);
+}
+
+.task-modal-btn.delete {
+  background-color: var(--primary-red);
+  border: 1px solid var(--primary-red);
+  color: #fefefe;
+}
+
+.task-modal-btn:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}

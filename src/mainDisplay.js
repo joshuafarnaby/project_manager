@@ -110,10 +110,9 @@ export const mainDisplay = (() => {
           ? e.target.querySelector('.task-name').textContent
           : e.target.closest('li').querySelector('.task-name').textContent
 
-        
         const task = currentProject.getTask(taskDescription)
 
-        console.log(task);
+        pubsub.publish('taskItemClicked', task)
       })
 
       listContainer.appendChild(li);
@@ -135,6 +134,18 @@ export const mainDisplay = (() => {
     `
 
     li.querySelector('.checkbox').addEventListener('click', toggleComplete);
+
+    li.addEventListener('click', (e) => {
+      if (e.target.classList.contains('checkbox')) return 
+
+      const taskDescription = e.target.localName == li 
+        ? e.target.querySelector('.task-name').textContent
+        : e.target.closest('li').querySelector('.task-name').textContent
+
+      const task = currentProject.getTask(taskDescription)
+
+      pubsub.publish('taskItemClicked', task)
+    })
 
     listContainer.insertBefore(li, listContainer.lastElementChild);
     currentProject.addTask(formDataObj.description, formDataObj.deadline, formDataObj.priority, formDataObj.notes);
