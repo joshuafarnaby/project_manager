@@ -24,16 +24,28 @@ export const taskModalModule = (() => {
     return modalContainer
   })();
 
+  const taskDescription = taskModal.querySelector('#task-description');
+  const taskDeadline = taskModal.querySelector('#task-deadline');
+  const taskStatus = taskModal.querySelector('#task-status');
+  const taskPriority = taskModal.querySelector('#task-priority');
+  const taskNotes = taskModal.querySelector('#task-notes');
+
   const capitalise = (word) => {
     return word.substring(0, 1).toUpperCase() + word.substring(1)
   }
 
   const populateTaskModal = ({description, deadline, priority, isComplete, notes}) => {
-    taskModal.querySelector('#task-description').textContent = description;
-    taskModal.querySelector('#task-deadline').textContent = `Deadline: ${deadline}`;
-    taskModal.querySelector('#task-status').textContent = `Status: ${isComplete ? 'Complete' : 'Incomplete'}`;
-    taskModal.querySelector('#task-priority').textContent = `Priority: ${capitalise(priority)}`;
-    taskModal.querySelector('#task-notes').textContent = notes;
+    taskDescription.textContent = description;
+    taskDeadline.textContent = `Deadline: ${deadline}`;
+    taskStatus.textContent = `Status: ${isComplete ? 'Complete' : 'Incomplete'}`;
+    taskPriority.textContent = `Priority: ${capitalise(priority)}`;
+    taskNotes.textContent = notes;
+
+    toggleModalVisibility();
+  }
+
+  const deleteTask = (ev) => {
+    pubsub.publish('deleteTaskBtnClicked', taskDescription.textContent);
 
     toggleModalVisibility();
   }
@@ -48,6 +60,7 @@ export const taskModalModule = (() => {
   pubsub.subscribe('taskItemClicked', populateTaskModal);
 
   taskModal.querySelector('#go-back').addEventListener('click', toggleModalVisibility);
+  taskModal.querySelector('#delete-task').addEventListener('click', deleteTask);
 
   return {
     insertTaskModal

@@ -41,6 +41,7 @@ export const mainDisplay = (() => {
   const mainHeading = mainDisplaySkeleton.querySelector('#main-heading');
   const listContainer = mainDisplaySkeleton.querySelector('#list');
   let currentProject;
+  let expandedTask;
 
   const requestSingleProject = (ev) => {
     const id = ev.target.localName == 'p' 
@@ -112,6 +113,7 @@ export const mainDisplay = (() => {
 
         const task = currentProject.getTask(taskDescription)
 
+        expandedTask = e.target.closest('li');
         pubsub.publish('taskItemClicked', task)
       })
 
@@ -144,12 +146,19 @@ export const mainDisplay = (() => {
 
       const task = currentProject.getTask(taskDescription)
 
+      expandedTask = e.target.closest('li');
       pubsub.publish('taskItemClicked', task)
     })
 
     listContainer.insertBefore(li, listContainer.lastElementChild);
     currentProject.addTask(formDataObj.description, formDataObj.deadline, formDataObj.priority, formDataObj.notes);
     currentProject.saveToLocalStorage();
+  }
+ 
+  const deleteTask = (taskDescription) => {
+    currentProject.deleteTask(taskDescription);
+    listContainer.removeChild(expandedTask);
+    expandedTask = null;
   }
 
   const render = () => {
@@ -161,7 +170,8 @@ export const mainDisplay = (() => {
 
   pubsub.subscribe('projectsRetrieved', renderProjectList);
   pubsub.subscribe('singleProjectRetrieved', renderSingleProject);
-  pubsub.subscribe('newTaskFormSubmitted', renderNewTask)
+  pubsub.subscribe('newTaskFormSubmitted', renderNewTask);
+  pubsub.subscribe('deleteTaskBtnClicked', deleteTask);
 
   return {
     render

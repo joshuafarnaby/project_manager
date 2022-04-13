@@ -23,6 +23,13 @@ export const projectsModule = (() => {
       getTask(taskDescription) {
         return this.tasks.filter(task => task.description == taskDescription)[0];
       },
+      deleteTask(taskDescription) {
+        const taskToDelete = this.tasks.filter(task => task.description == taskDescription)[0];
+
+        this.tasks.splice(this.tasks.indexOf(taskToDelete), 1);
+
+        this.saveToLocalStorage();
+      },
       saveToLocalStorage() {
         localStorage.setItem(this.name, JSON.stringify({
           name: this.name,
@@ -30,8 +37,6 @@ export const projectsModule = (() => {
           type: this.type,
           tasks: this.tasks
         }));
-
-        // console.log(this);
       }
     }
   }
