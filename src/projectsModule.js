@@ -21,7 +21,10 @@ export const projectsModule = (() => {
       id: id || generateUniqueID(),
       tasks: [],
       addTask({ description, deadline, priority, notes, isComplete, id }) {
-        this.tasks.push(Task(description, deadline, priority, notes, isComplete, id));
+        const newTask = Task(description, deadline, priority, notes, isComplete, id);
+        this.tasks.push(newTask);
+
+        return newTask
       },
       getTask(taskDescription) {
         return this.tasks.filter(task => task.description == taskDescription)[0];
@@ -77,8 +80,11 @@ export const projectsModule = (() => {
   }
 
   const createNewProject = ({ name, deadline, type }) => {
-    const formatDeadline = deadline.split('-').reverse().join('-');
-    const newProject = Project(name, type, formatDeadline == '' ? null : formatDeadline);
+    const formatDeadline = deadline ? 
+      deadline.split('-').reverse().join('-') :
+      null
+
+    const newProject = Project({ name, type, deadline: formatDeadline });
 
     projects.push(newProject)
     newProject.saveToLocalStorage();
@@ -89,6 +95,14 @@ export const projectsModule = (() => {
     if (tabName == 'projects') sendProjectSummary('All Projects', projects);
     if (tabName == 'week') sendProjectSummary('Week', weekdays);
     if (tabName == 'today') sendDefaultProject();
+  }
+
+  const addNewTask = ({ description, deadline, priority, notes, projectID, isComplete }) => {
+    const project = [...projects, ...weekdays].filter(project => project.id == projectID)[0];
+    const newTask = project.addTask({ description, deadline, priority, notes, isComplete});
+
+    project.saveToLocalStorage();
+    pubsub.publish('newTaskAdded', newTask);
   }
 
   const loadCustomProjects = (projectList) => {
@@ -141,5 +155,6 @@ export const projectsModule = (() => {
   pubsub.subscribe('tabChanged', handleTabChange);
   pubsub.subscribe('singleProjectRequested', sendSingleProject);
   pubsub.subscribe('newProjectFormSubmitted', createNewProject);
-  pubsub.subscribe('completeToggled', updateTaskCompleteState)
+  pubsub.subscribe('newTaskFormSubmitted', addNewTask);
+  pubsub.subscribe('completeToggled', updateTaskCompleteState);
 })();

@@ -53,17 +53,22 @@ export const mainDisplay = (() => {
 
   const toggleComplete = (ev) => {
     ev.target.parentElement.classList.toggle('complete');
-    const projectName = document.querySelector('#main-heading').textContent;
-    const taskDescription = ev.target.nextElementSibling.textContent;
+    // const projectName = document.querySelector('#main-heading').textContent;
+    // const taskDescription = ev.target.nextElementSibling.textContent;
+    const projectID = ev.target.closest('ul').getAttribute('data-project-id');
+    const taskID = ev.target.closest('li').getAttribute('data-task-id');
 
-    pubsub.publish('completeToggled', [projectName, taskDescription]);
+    console.log(projectID);
+    console.log(taskID);
+
+    // pubsub.publish('completeToggled', [projectName, taskDescription]);
   }
 
   const renderProjectList = (projectData) => {
-    console.log(projectData);
     mainHeading.textContent = projectData.heading;
     listContainer.innerHTML = '';
     listContainer.setAttribute('class', 'list multiple-projects');
+    listContainer.removeAttribute('data-project-id');
 
     projectData.projectsInfo.forEach(project => {
       const li = document.createElement('li');
@@ -85,60 +90,19 @@ export const mainDisplay = (() => {
     if (projectData.heading != 'Week') listContainer.appendChild(newProjectBtn);
   }
 
-  const renderSingleProject = (project) => {
-    // console.log(project);
-    mainHeading.textContent = project.name;
-    listContainer.innerHTML = '';
-    listContainer.setAttribute('class', 'list single-project');
-
-    if (project.deadline) mainDisplaySkeleton.querySelector('#deadline-container').textContent = `Due: ${project.deadline}`;
-
-    project.tasks.forEach(task => {
-      const li = document.createElement('li');
-      task.isComplete ? li.setAttribute('class', 'list-item task complete') : li.setAttribute('class', 'list-item task');
-
-      li.innerHTML = `
-        <div class="checkbox"></div>
-        <p class="task-name">${task.description}</p>
-        <p class="task-deadline">${task.deadline}</p>
-        <p class="task-priority ${task.priority}"></p>
-      `
-
-      li.querySelector('.checkbox').addEventListener('click', toggleComplete);
-
-      li.addEventListener('click', (e) => {
-        if (e.target.classList.contains('checkbox')) return 
-
-        const taskDescription = e.target.localName == li 
-          ? e.target.querySelector('.task-name').textContent
-          : e.target.closest('li').querySelector('.task-name').textContent
-
-        const task = currentProject.getTask(taskDescription)
-
-        expandedTask = e.target.closest('li');
-        pubsub.publish('taskItemClicked', task)
-      })
-
-      listContainer.appendChild(li);
-    })
-
-    currentProject = project;
-    listContainer.appendChild(newTaskBtn);
-  }
-
-  const renderNewTask = (formDataObj) => {
+  const createTaskElement = ({ description, deadline, priority, isComplete, id }) => {
     const li = document.createElement('li');
-    li.setAttribute('class', 'list-item task');
+    li.setAttribute('class', isComplete ? 'list-item task complete' : 'list-item task');
+    li.setAttribute('data-task-id', id);
 
     li.innerHTML = `
       <div class="checkbox"></div>
-      <p class="task-name">${formDataObj.description}</p>
-      <p class="task-deadline">${formDataObj.deadline}</p>
-      <p class="task-priority ${formDataObj.priority}"></p>
+      <p class="task-name">${description}</p>
+      <p class="task-deadline">${deadline}</p>
+      <p class="task-priority ${priority}"></p>
     `
 
     li.querySelector('.checkbox').addEventListener('click', toggleComplete);
-
     li.addEventListener('click', (e) => {
       if (e.target.classList.contains('checkbox')) return 
 
@@ -152,11 +116,24 @@ export const mainDisplay = (() => {
       pubsub.publish('taskItemClicked', task)
     })
 
-    listContainer.insertBefore(li, listContainer.lastElementChild);
-    formDataObj.isComplete = false;
-    currentProject.addTask(formDataObj);
-    currentProject.saveToLocalStorage();
+    return li
   }
+
+  const renderSingleProject = (project) => {
+    mainHeading.textContent = project.name;
+    listContainer.innerHTML = '';
+    listContainer.setAttribute('class', 'list single-project');
+    listContainer.setAttribute('data-project-id', project.id)
+
+    if (project.deadline) mainDisplaySkeleton.querySelector('#deadline-container').textContent = `Due: ${project.deadline}`;
+
+    project.tasks.forEach(task => listContainer.appendChild(createTaskElement(task)))
+
+    currentProject = project;
+    listContainer.appendChild(newTaskBtn);
+  }
+
+  const renderNewTask = (newTask) => listContainer.insertBefore(createTaskElement(newTask), listContainer.lastElementChild);
  
   const deleteTask = (taskDescription) => {
     currentProject.deleteTask(taskDescription);
@@ -173,7 +150,7 @@ export const mainDisplay = (() => {
 
   pubsub.subscribe('projectsRetrieved', renderProjectList);
   pubsub.subscribe('singleProjectRetrieved', renderSingleProject);
-  pubsub.subscribe('newTaskFormSubmitted', renderNewTask);
+  pubsub.subscribe('newTaskAdded', renderNewTask);
   pubsub.subscribe('deleteTaskBtnClicked', deleteTask);
 
   return {

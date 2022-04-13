@@ -44,16 +44,19 @@ export const newTaskForm = (() => {
     ev.preventDefault();
 
     const formData = new FormData(ev.target.closest('form'));
-    const formDataObj = {};
+    const dataObj = {};
 
     for (let entry of formData.entries()) {
       // rudimentary form validation - will be fleshed out
       if (!entry[1]) return
 
-      formDataObj[entry[0]] = entry[1];
+      dataObj[entry[0]] = entry[1];
     }
 
-    pubsub.publish('newTaskFormSubmitted', formDataObj);
+    dataObj.projectID = ev.target.closest('ul').getAttribute('data-project-id');
+    dataObj.isComplete = false;
+
+    pubsub.publish('newTaskFormSubmitted', dataObj);
 
     hideNewTaskForm(ev);
   }
