@@ -1,13 +1,13 @@
 import { pubsub } from "./pubsub";
 
 export const newProjectForm = (() => {
-  const modalOverlay = (() => {
-    const div = document.createElement('div');
-    div.setAttribute('id', 'modal-overlay');
-    div.setAttribute('class', 'modal-overlay');
+  // const modalOverlay = (() => {
+  //   const div = document.createElement('div');
+  //   div.setAttribute('id', 'modal-overlay');
+  //   div.setAttribute('class', 'modal-overlay');
 
-    return div
-  })();
+  //   return div
+  // })();
 
   const newProjectForm = (() => {
     const container = document.createElement('div');
@@ -36,7 +36,7 @@ export const newProjectForm = (() => {
   })();
 
   const toggleFormVisibility = () => {
-    modalOverlay.classList.toggle('active');
+    document.querySelector('#modal-overlay').classList.toggle('active');
     newProjectForm.classList.toggle('active');
     newProjectForm.querySelector('#project-name').value = '';
     newProjectForm.querySelector('#deadline').value = '';
@@ -57,7 +57,7 @@ export const newProjectForm = (() => {
   }
 
   const insertForm = () => document.querySelector('.wrapper').appendChild(newProjectForm);
-  const insertOverlay = () => document.querySelector('.wrapper').appendChild(modalOverlay);
+  // const insertOverlay = () => document.querySelector('.wrapper').appendChild(modalOverlay);
 
   pubsub.subscribe('newProjectBtnClicked', toggleFormVisibility)
 
@@ -66,7 +66,7 @@ export const newProjectForm = (() => {
   newProjectForm.querySelector('#add-btn').addEventListener('click', addNewProject)
 
   return {
-    insertOverlay,
+    // insertOverlay,
     insertForm
   }
 })();

@@ -92,30 +92,29 @@ export const mainDisplay = (() => {
 
     project.tasks.forEach(task => {
       const li = document.createElement('li');
-      // console.log(task);
       task.isComplete ? li.setAttribute('class', 'list-item task complete') : li.setAttribute('class', 'list-item task');
 
       li.innerHTML = `
         <div class="checkbox"></div>
         <p class="task-name">${task.description}</p>
-        <p class="task-deadline">${task.deadline ? task.deadline : 'Anytime'}</p>
+        <p class="task-deadline">${task.deadline}</p>
         <p class="task-priority ${task.priority}"></p>
       `
 
       li.querySelector('.checkbox').addEventListener('click', toggleComplete);
 
-      // li.addEventListener('click', (e) => {
-      //   if (e.target.classList.contains('checkbox')) return 
+      li.addEventListener('click', (e) => {
+        if (e.target.classList.contains('checkbox')) return 
 
-      //   const taskDescription = e.target.localName == li 
-      //     ? e.target.querySelector('.task-name').textContent
-      //     : e.target.closest('li').querySelector('.task-name').textContent
+        const taskDescription = e.target.localName == li 
+          ? e.target.querySelector('.task-name').textContent
+          : e.target.closest('li').querySelector('.task-name').textContent
 
         
-      //   const task = currentProject.getTask(taskDescription)
+        const task = currentProject.getTask(taskDescription)
 
-      //   console.log(task);
-      // })
+        console.log(task);
+      })
 
       listContainer.appendChild(li);
     })
@@ -131,11 +130,10 @@ export const mainDisplay = (() => {
     li.innerHTML = `
       <div class="checkbox"></div>
       <p class="task-name">${formDataObj.description}</p>
-      <p class="task-deadline">${formDataObj.deadline ? formDataObj.deadline : 'Anytime'}</p>
+      <p class="task-deadline">${formDataObj.deadline}</p>
       <p class="task-priority ${formDataObj.priority}"></p>
     `
 
-    // li.querySelector('.checkbox').addEventListener('click', (e) => e.target.parentElement.classList.toggle('complete'));
     li.querySelector('.checkbox').addEventListener('click', toggleComplete);
 
     listContainer.insertBefore(li, listContainer.lastElementChild);
