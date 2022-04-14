@@ -68,13 +68,9 @@ export const mainDisplay = (() => {
       li.setAttribute('class', 'list-item project');
       li.setAttribute('data-project-id', project.id);
 
-      li.innerHTML = `
-        <p class="project-name">${project.name}</p>
-      `
+      li.innerHTML = `<p class="project-name">${project.name}</p>`
 
-      if (project.deadline) {
-        li.innerHTML += `<p class="project-deadline small">Due: ${project.deadline}</p>`
-      }
+      if (project.deadline) li.innerHTML += `<p class="project-deadline small">Due: ${project.deadline}</p>`
 
       li.addEventListener('click', requestSingleProject);
       listContainer.appendChild(li);
