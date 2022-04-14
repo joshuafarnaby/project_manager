@@ -59,6 +59,7 @@ export const mainDisplay = (() => {
 
   const renderProjectList = (projectData) => {
     mainHeading.textContent = projectData.heading;
+    document.getElementById('deadline-container').textContent = '';
     listContainer.innerHTML = '';
     listContainer.setAttribute('class', 'list multiple-projects');
     listContainer.removeAttribute('data-project-id');
@@ -123,7 +124,7 @@ export const mainDisplay = (() => {
 
   const updateTaskItem = ({ id, description, deadline, isComplete, priority }) => {
     const taskItem = listContainer.querySelector(`[data-task-id='${id}']`);
-    
+
     taskItem.querySelector('.task-name').textContent = description;
     taskItem.querySelector('.task-deadline').textContent = deadline;
     taskItem.querySelector('.task-priority').setAttribute('class', `task-priority ${priority}`);
