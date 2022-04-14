@@ -29,7 +29,8 @@
   border-radius: 10px;
 }
 
-.task-modal-btn.back {
+.task-modal-btn.back,
+.task-modal-btn.submit {
   background-color: #fefefe;
   border: 1px solid var(--primary-red);
   color: var(--primary-red);
@@ -41,7 +42,8 @@
   color: var(--blue);
 }
 
-.task-modal-btn.delete {
+.task-modal-btn.delete,
+.task-modal-btn.cancel-edit {
   background-color: var(--primary-red);
   border: 1px solid var(--primary-red);
   color: #fefefe;
@@ -56,19 +58,23 @@ textarea[id='task-notes']:disabled,
 select:disabled,
 input:disabled {
   background-color: #fefefe;
+  border-color: var(--primary-red);
+  color: var(--primary-red);
 }
 
-/* input:enabled {
-  width: 100%;
-} */
+.edit-task input:enabled,
+.edit-task select:enabled,
+.edit-task textarea[id='task-notes']:enabled {
+  box-shadow: 3px 3px 4px var(--primary-red);
+}
 
 .full-length {
   width: 100%;
 }
 
-.edit-task input:focus {
+/* .edit-task input:focus {
   box-shadow: 3px 3px 4px var(--primary-red);
-}
+} */
 
 .edit-task > p {
   display: flex;

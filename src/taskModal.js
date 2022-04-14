@@ -56,15 +56,41 @@ export const taskModalModule = (() => {
         <label for="task-notes">Notes:</label>
         <textarea name="notes" id="task-notes" class="new-task-control" disabled></textarea>
       </p>
-      <div class="task-modal-btns-container">
-        <button id="go-back" type="button" class="task-modal-btn back">Go back</button>
-        <button id="edit-task" type="button" class="task-modal-btn edit">Edit Task</button>
-        <button id="delete-task" type="button" class="task-modal-btn delete">Delete Task</button>
-      </div>
     `
 
     return modalContainer
   })();
+
+  // <div class="task-modal-btns-container">
+  //   <button id="go-back" type="button" class="task-modal-btn back">Go back</button>
+  //   <button id="edit-task" type="button" class="task-modal-btn edit">Edit Task</button>
+  //   <button id="delete-task" type="button" class="task-modal-btn delete">Delete Task</button> 
+  // </div>
+
+  const taskModalBtns = (() => {
+    const container = document.createElement('div');
+    container.setAttribute('class', 'task-modal-btns-container');
+
+    container.innerHTML = `
+      <button id="go-back" type="button" class="task-modal-btn back">Go back</button>
+      <button id="edit-task" type="button" class="task-modal-btn edit">Edit Task</button>
+      <button id="delete-task" type="button" class="task-modal-btn delete">Delete Task</button> 
+    `
+
+    return container
+  })()
+
+  const editFormBtns = (() => {
+    const container = document.createElement('div');
+    container.setAttribute('class', 'task-modal-btns-container');
+
+    container.innerHTML = `
+      <button id="submit-edit-btn" type="button" class="task-modal-btn submit">Submit Changes</button>
+      <button id="cancel-edit" type="button" class="task-modal-btn cancel-edit">Cancel Edit</button>
+    `
+
+    return container
+  })()
 
   const taskDescription = taskModal.querySelector('#task-description');
   const taskDeadline = taskModal.querySelector('#task-deadline');
@@ -72,30 +98,40 @@ export const taskModalModule = (() => {
   const taskPriority = taskModal.querySelector('#task-priority');
   const taskNotes = taskModal.querySelector('#task-notes');
 
-  const capitalise = (word) => word.substring(0, 1).toUpperCase() + word.substring(1);
-
   const populateTaskModal = ({description, deadline, priority, isComplete, notes, id}) => {
-    // taskDescription.textContent = description;
     taskDescription.value = description;
     taskDeadline.value = deadline;
-    // taskStatus.textContent = `Status: ${isComplete ? 'Complete' : 'Incomplete'}`;
     taskStatus.value = isComplete;
-    // taskPriority.textContent = `Priority: ${capitalise(priority)}`;
     taskPriority.value = priority;
     taskNotes.textContent = notes;
     taskModal.setAttribute('data-task-id', id)
+    taskModal.appendChild(taskModalBtns);
 
     toggleModalVisibility();
   }
 
-  const activateEditForm = () => {
-    taskModal.querySelectorAll('input').forEach(input => input.disabled = false);
-    taskStatus.disabled = false;
-    taskPriority.disabled = false;
-    taskNotes.disabled = false;
+  const toggleInputDisabledState = () => {
+    taskModal.querySelectorAll('input').forEach(input => input.disabled = !input.disabled);
+    taskStatus.disabled = !taskStatus.disabled;
+    taskPriority.disabled = !taskPriority.disabled;
+    taskNotes.disabled = !taskNotes.disabled;
+    taskDescription.classList.toggle('full-length');
+  }
 
-    taskDescription.classList.toggle('full-length')
+  const activateEditForm = () => {
+    toggleInputDisabledState();
     taskDescription.focus()
+
+    taskModal.removeChild(taskModalBtns);
+    taskModal.appendChild(editFormBtns);
+  }
+
+  const deactivateEditForm = () => {
+    toggleInputDisabledState();
+    taskDescription.blur()
+
+    taskModal.removeChild(editFormBtns);
+    taskModal.appendChild(taskModalBtns);
   }
 
   const deleteTask = () => {
@@ -116,9 +152,11 @@ export const taskModalModule = (() => {
 
   pubsub.subscribe('taskItemRetrieved', populateTaskModal);
 
-  taskModal.querySelector('#go-back').addEventListener('click', toggleModalVisibility);
-  taskModal.querySelector('#edit-task').addEventListener('click', activateEditForm);
-  taskModal.querySelector('#delete-task').addEventListener('click', deleteTask);
+  taskModalBtns.querySelector('#go-back').addEventListener('click', toggleModalVisibility);
+  taskModalBtns.querySelector('#edit-task').addEventListener('click', activateEditForm);
+  taskModalBtns.querySelector('#delete-task').addEventListener('click', deleteTask);
+
+  editFormBtns.querySelector('#cancel-edit').addEventListener('click', deactivateEditForm)
 
   return {
     insertTaskModal
