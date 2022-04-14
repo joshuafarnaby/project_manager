@@ -1,29 +1,7 @@
 import { pubsub } from "./pubsub";
+import { getAllFormData } from "./utilities";
 
 export const taskModalModule = (() => {
-  // const taskModal = (() => {
-  //   const modalContainer = document.createElement('div');
-  //   modalContainer.setAttribute('class', 'modal-container task-modal');
-
-  //   modalContainer.innerHTML = `
-  //     <h2 id="task-description"></h2>
-  //     <p id="task-deadline"></p>
-  //     <p id="task-status"></p>
-  //     <p id="task-priority"></p>
-  //     <p>Notes:</p>
-  //     <div class="notes">
-  //       <p id="task-notes"></p>
-  //     </div>
-  //     <div class="task-modal-btns-container">
-  //       <button id="go-back" class="task-modal-btn back">Go back</button>
-  //       <button id="edit-task" class="task-modal-btn edit">Edit Task</button>
-  //       <button id="delete-task" class="task-modal-btn delete">Delete Task</button>
-  //     </div>
-  //   `
-
-  //   return modalContainer
-  // })();
-
   const taskModal = (() => {
     const modalContainer = document.createElement('form');
     modalContainer.setAttribute('class', 'modal-container task-modal edit-task');
@@ -31,11 +9,11 @@ export const taskModalModule = (() => {
     modalContainer.innerHTML = `
       <p>
         <label for="task-description" class="label large">Task:</label>
-        <input type="text" name="task-description" id="task-description" class="edit-task-control" disabled>
+        <input type="text" name="description" id="task-description" class="edit-task-control full-length" disabled>
       </p>
       <p>
         <label for="task-deadline" class="label large">Deadline:</label>
-        <input type="time" name="task-deadline" id="task-deadline" class="edit-task-control" disabled>
+        <input type="time" name="deadline" id="task-deadline" class="edit-task-control" disabled>
       </p>
       <p>
         <label for="task-status" class="label large">Status:</label>
@@ -85,7 +63,7 @@ export const taskModalModule = (() => {
     container.setAttribute('class', 'task-modal-btns-container');
 
     container.innerHTML = `
-      <button id="submit-edit-btn" type="button" class="task-modal-btn submit">Submit Changes</button>
+      <button id="submit-edit-btn" type="submit" class="task-modal-btn submit">Submit Changes</button>
       <button id="cancel-edit" type="button" class="task-modal-btn cancel-edit">Cancel Edit</button>
     `
 
@@ -115,7 +93,19 @@ export const taskModalModule = (() => {
     taskStatus.disabled = !taskStatus.disabled;
     taskPriority.disabled = !taskPriority.disabled;
     taskNotes.disabled = !taskNotes.disabled;
-    taskDescription.classList.toggle('full-length');
+    // taskDescription.classList.toggle('full-length');
+  }
+
+  const submitEditData = (ev) => {
+    ev.preventDefault();
+
+    const formData = getAllFormData(new FormData(ev.target.closest('form')))
+    formData.projectID = document.querySelector('#list').getAttribute('data-project-id');
+    formData.taskID= taskModal.getAttribute('data-task-id');
+
+    pubsub.publish('editTaskFormSubmitted', formData);
+    deactivateEditForm();
+    toggleModalVisibility();
   }
 
   const activateEditForm = () => {
@@ -156,7 +146,9 @@ export const taskModalModule = (() => {
   taskModalBtns.querySelector('#edit-task').addEventListener('click', activateEditForm);
   taskModalBtns.querySelector('#delete-task').addEventListener('click', deleteTask);
 
-  editFormBtns.querySelector('#cancel-edit').addEventListener('click', deactivateEditForm)
+  editFormBtns.querySelector('#cancel-edit').addEventListener('click', deactivateEditForm);
+  editFormBtns.querySelector('#submit-edit-btn').addEventListener('click', submitEditData);
+
 
   return {
     insertTaskModal

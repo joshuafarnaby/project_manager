@@ -1,5 +1,6 @@
 import { pubsub } from "./pubsub";
 import { generateUniqueID } from "./utilities";
+import { getAllLocalStorageKeys } from "./utilities";
 
 export const projectsModule = (() => {
   const Project = ({ name, type, deadline, id }) => {
@@ -28,6 +29,18 @@ export const projectsModule = (() => {
       },
       getTask(taskID) {
         return this.tasks.filter(task => task.id == taskID)[0];
+      },
+      editTask({ taskID, description, deadline, isComplete, priority, notes }) {
+        const taskToEdit = this.getTask(taskID);
+        taskToEdit.description = description;
+        taskToEdit.deadline = deadline;
+        taskToEdit.isComplete = JSON.parse(isComplete);
+        taskToEdit.priority = priority;
+        taskToEdit.notes = notes;
+
+        console.log(taskToEdit);
+        this.saveToLocalStorage();
+        pubsub.publish('taskEdited', taskToEdit);
       },
       deleteTask(taskID) {
         const taskToDelete = this.tasks.filter(task => task.id == taskID)[0];
@@ -135,14 +148,8 @@ export const projectsModule = (() => {
 
   const deleteTask = ({ projectID, taskID }) => getProject(projectID).deleteTask(taskID);
 
-  const getAllLocalStorageKeys = () => {
-    const keys = [];
-
-    for (let i = 0; i < window.localStorage.length; i++) {
-      keys.push(localStorage.key(i))
-    }
-
-    return keys
+  const editTask = (formDataObj) => {
+    getProject(formDataObj.projectID).editTask(formDataObj);
   }
 
   const loadSavedProjects = () => {
@@ -161,5 +168,6 @@ export const projectsModule = (() => {
   pubsub.subscribe('newTaskFormSubmitted', addNewTask);
   pubsub.subscribe('completeToggled', updateTaskCompleteState);
   pubsub.subscribe('taskItemClicked', sendTaskItem);
-  pubsub.subscribe('deleteTaskBtnClicked', deleteTask)
+  pubsub.subscribe('deleteTaskBtnClicked', deleteTask);
+  pubsub.subscribe('editTaskFormSubmitted', editTask)
 })();

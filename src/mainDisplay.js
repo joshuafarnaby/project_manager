@@ -121,8 +121,17 @@ export const mainDisplay = (() => {
     listContainer.appendChild(newTaskBtn);
   }
 
+  const updateTaskItem = ({ id, description, deadline, isComplete, priority }) => {
+    const taskItem = listContainer.querySelector(`[data-task-id='${id}']`);
+    
+    taskItem.querySelector('.task-name').textContent = description;
+    taskItem.querySelector('.task-deadline').textContent = deadline;
+    taskItem.querySelector('.task-priority').setAttribute('class', `task-priority ${priority}`);
+    isComplete ? taskItem.classList.add('complete') : taskItem.classList.remove('complete')
+  }
+
   const renderNewTask = (newTask) => listContainer.insertBefore(createTaskElement(newTask), listContainer.lastElementChild);
- 
+
   const deleteTask = ({ taskID }) => listContainer.removeChild(listContainer.querySelector(`[data-task-id='${taskID}']`));
 
   const render = () => {
@@ -134,6 +143,7 @@ export const mainDisplay = (() => {
   pubsub.subscribe('singleProjectRetrieved', renderSingleProject);
   pubsub.subscribe('newTaskAdded', renderNewTask);
   pubsub.subscribe('deleteTaskBtnClicked', deleteTask);
+  pubsub.subscribe('taskEdited', updateTaskItem);
 
   return {
     render
