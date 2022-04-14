@@ -29,8 +29,8 @@ export const projectsModule = (() => {
       getTask(taskID) {
         return this.tasks.filter(task => task.id == taskID)[0];
       },
-      deleteTask(taskDescription) {
-        const taskToDelete = this.tasks.filter(task => task.description == taskDescription)[0];
+      deleteTask(taskID) {
+        const taskToDelete = this.tasks.filter(task => task.id == taskID)[0];
 
         this.tasks.splice(this.tasks.indexOf(taskToDelete), 1);
         this.saveToLocalStorage();
@@ -69,6 +69,7 @@ export const projectsModule = (() => {
   }
 
   const sendSingleProject = (id) => pubsub.publish('singleProjectRetrieved', getProject(id));
+  const sendTaskItem = ({ projectID, taskID }) => pubsub.publish('taskItemRetrieved', getProject(projectID).getTask(taskID))
 
   const sendDefaultProject = () => {
     const date = new Date;
@@ -132,6 +133,8 @@ export const projectsModule = (() => {
     project.saveToLocalStorage();
   }
 
+  const deleteTask = ({ projectID, taskID }) => getProject(projectID).deleteTask(taskID);
+
   const getAllLocalStorageKeys = () => {
     const keys = [];
 
@@ -157,4 +160,6 @@ export const projectsModule = (() => {
   pubsub.subscribe('newProjectFormSubmitted', createNewProject);
   pubsub.subscribe('newTaskFormSubmitted', addNewTask);
   pubsub.subscribe('completeToggled', updateTaskCompleteState);
+  pubsub.subscribe('taskItemClicked', sendTaskItem);
+  pubsub.subscribe('deleteTaskBtnClicked', deleteTask)
 })();

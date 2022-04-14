@@ -30,22 +30,24 @@ export const taskModalModule = (() => {
   const taskPriority = taskModal.querySelector('#task-priority');
   const taskNotes = taskModal.querySelector('#task-notes');
 
-  const capitalise = (word) => {
-    return word.substring(0, 1).toUpperCase() + word.substring(1)
-  }
+  const capitalise = (word) => word.substring(0, 1).toUpperCase() + word.substring(1);
 
-  const populateTaskModal = ({description, deadline, priority, isComplete, notes}) => {
+  const populateTaskModal = ({description, deadline, priority, isComplete, notes, id}) => {
     taskDescription.textContent = description;
     taskDeadline.textContent = `Deadline: ${deadline}`;
     taskStatus.textContent = `Status: ${isComplete ? 'Complete' : 'Incomplete'}`;
     taskPriority.textContent = `Priority: ${capitalise(priority)}`;
     taskNotes.textContent = notes;
+    taskModal.setAttribute('data-task-id', id)
 
     toggleModalVisibility();
   }
 
-  const deleteTask = (ev) => {
-    pubsub.publish('deleteTaskBtnClicked', taskDescription.textContent);
+  const deleteTask = () => {
+    pubsub.publish('deleteTaskBtnClicked', {
+      projectID: document.querySelector('ul#list').getAttribute('data-project-id'),
+      taskID: taskModal.getAttribute('data-task-id')
+    });
 
     toggleModalVisibility();
   }
@@ -57,7 +59,7 @@ export const taskModalModule = (() => {
 
   const insertTaskModal = () => document.querySelector('.wrapper').appendChild(taskModal)
 
-  pubsub.subscribe('taskItemClicked', populateTaskModal);
+  pubsub.subscribe('taskItemRetrieved', populateTaskModal);
 
   taskModal.querySelector('#go-back').addEventListener('click', toggleModalVisibility);
   taskModal.querySelector('#delete-task').addEventListener('click', deleteTask);

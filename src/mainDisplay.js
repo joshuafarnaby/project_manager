@@ -40,8 +40,6 @@ export const mainDisplay = (() => {
 
   const mainHeading = mainDisplaySkeleton.querySelector('#main-heading');
   const listContainer = mainDisplaySkeleton.querySelector('#list');
-  let currentProject;
-  let expandedTask;
 
   const requestSingleProject = (ev) => {
     const id = ev.target.localName == 'p' 
@@ -53,17 +51,13 @@ export const mainDisplay = (() => {
 
   const toggleComplete = (ev) => {
     ev.target.parentElement.classList.toggle('complete');
-    // const projectName = document.querySelector('#main-heading').textContent;
-    // const taskDescription = ev.target.nextElementSibling.textContent;
     const projectID = ev.target.closest('ul').getAttribute('data-project-id');
     const taskID = ev.target.closest('li').getAttribute('data-task-id');
 
-    // pubsub.publish('completeToggled', { projectID: projectID, taskID: taskID });
     pubsub.publish('completeToggled', { projectID, taskID });
   }
 
   const renderProjectList = (projectData) => {
-    console.log(projectData);
     mainHeading.textContent = projectData.heading;
     listContainer.innerHTML = '';
     listContainer.setAttribute('class', 'list multiple-projects');
@@ -72,7 +66,6 @@ export const mainDisplay = (() => {
     projectData.projectsInfo.forEach(project => {
       const li = document.createElement('li');
       li.setAttribute('class', 'list-item project');
-      // li.setAttribute('id', project.name);
       li.setAttribute('data-project-id', project.id);
 
       li.innerHTML = `
@@ -103,20 +96,20 @@ export const mainDisplay = (() => {
     `
 
     li.querySelector('.checkbox').addEventListener('click', toggleComplete);
-    li.addEventListener('click', (e) => {
-      if (e.target.classList.contains('checkbox')) return 
-
-      const taskDescription = e.target.localName == li 
-        ? e.target.querySelector('.task-name').textContent
-        : e.target.closest('li').querySelector('.task-name').textContent
-
-      const task = currentProject.getTask(taskDescription)
-
-      expandedTask = e.target.closest('li');
-      pubsub.publish('taskItemClicked', task)
-    })
+    li.addEventListener('click', sendTaskIDToExpand)
 
     return li
+  }
+
+  const sendTaskIDToExpand = (ev) => {
+    if (ev.target.classList.contains('checkbox')) return 
+
+    pubsub.publish('taskItemClicked', {
+      projectID: ev.target.closest('ul').getAttribute('data-project-id'),
+      taskID: ev.target.localName == 'li'
+      ? ev.target.getAttribute('data-task-id')
+      : ev.target.closest('li').getAttribute('data-task-id')
+    });
   }
 
   const renderSingleProject = (project) => {
@@ -129,25 +122,18 @@ export const mainDisplay = (() => {
 
     project.tasks.forEach(task => listContainer.appendChild(createTaskElement(task)))
 
-    currentProject = project;
     listContainer.appendChild(newTaskBtn);
   }
 
   const renderNewTask = (newTask) => listContainer.insertBefore(createTaskElement(newTask), listContainer.lastElementChild);
  
-  const deleteTask = (taskDescription) => {
-    currentProject.deleteTask(taskDescription);
-    listContainer.removeChild(expandedTask);
-    expandedTask = null;
-  }
+  const deleteTask = ({ taskID }) => listContainer.removeChild(listContainer.querySelector(`[data-task-id='${taskID}']`));
 
   const render = () => {
     document.querySelector('.wrapper').appendChild(mainDisplaySkeleton);
-
     pubsub.publish('mainDisplayRendered');
   };
   
-
   pubsub.subscribe('projectsRetrieved', renderProjectList);
   pubsub.subscribe('singleProjectRetrieved', renderSingleProject);
   pubsub.subscribe('newTaskAdded', renderNewTask);
