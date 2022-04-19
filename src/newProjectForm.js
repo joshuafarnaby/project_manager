@@ -63,7 +63,6 @@ export const newProjectForm = (() => {
 
   pubsub.subscribe('newProjectBtnClicked', toggleFormVisibility)
 
-
   newProjectForm.querySelector('#cancel-btn').addEventListener('click', toggleFormVisibility)
   newProjectForm.querySelector('#add-btn').addEventListener('click', addNewProject)
 
